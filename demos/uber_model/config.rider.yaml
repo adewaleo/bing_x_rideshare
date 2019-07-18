@@ -1,6 +1,11 @@
 # client id and secret from https://developer.uber.com/dashboard/
-client_id: xxx
-client_secret: xxx
-redirect_url: http://localhost:8000/uber/connect
+client_id: "****"
+client_secret: "****"
+redirect_url: "http://localhost:8000/"
 scopes:
+    - profile
+    - history
+    - places
     - request
+    - request_receipt
+    - all_trips
