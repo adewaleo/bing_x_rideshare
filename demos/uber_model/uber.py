@@ -24,6 +24,7 @@ def import_app_credentials(filename=CREDENTIALS_FILENAME):
     client_id = config['client_id']
     client_secret = config['client_secret']
     redirect_url = config['redirect_url']
+    access_token = config['access_token']
 
     config_values = [client_id, client_secret, redirect_url]
 
@@ -36,6 +37,7 @@ def import_app_credentials(filename=CREDENTIALS_FILENAME):
         'client_secret': client_secret,
         'redirect_url': redirect_url,
         'scopes': set(config['scopes']),
+        'access_token': access_token
     }
 
     return credentials
@@ -100,14 +102,22 @@ if __name__ == "__main__":
     if os.path.exists('oauth_rider_session_store.yaml'):
         pass
 
-    # client = get_uber_rides_client('oauth_rider_session_store.yaml')
-    credentials = import_app_credentials('config.rider.yaml')
+    client = get_uber_rides_client('oauth_rider_session_store.yaml')
+    # credentials = import_app_credentials('config.rider.yaml')
+    #
+    # oauth = OAuth2Credential(client_id=credentials["client_id"], scopes=credentials["scopes"], access_token=credentials['access_token'], expires_in_seconds=500, grant_type="authorization_code")
+    # print(oauth)
+    # session = Session(oauth2credential=oauth)
+    # client = UberRidesClient(session)
 
-    oauth = OAuth2Credential(client_id=credentials["client_id"], scopes=credentials["scopes"], access_token=ACCESS_TOKEN, expires_in_seconds=500, grant_type="authorization_code")
-    print(oauth)
-    session = Session(oauth2credential=oauth)
-    client = UberRidesClient(session)
 
+    estimate = client.get_price_estimates(start_latitude=START_LAT,
+        start_longitude=START_LNG,
+        end_latitude=END_LAT,
+        end_longitude=END_LNG,
+        seat_count=2)
+
+    print(estimate)
 
     estimate = client.estimate_ride(
         product_id='d4abaae7-f4d6-4152-91cc-77523e8165a4',
@@ -120,15 +130,7 @@ if __name__ == "__main__":
 
     print(estimate)
 
-    print(credentials["scopes"])
 
-    estimate = client.get_price_estimates(start_latitude=START_LAT,
-        start_longitude=START_LNG,
-        end_latitude=END_LAT,
-        end_longitude=END_LNG,
-        seat_count=2)
-
-    print(estimate)
 
 
 
