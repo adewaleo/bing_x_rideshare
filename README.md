@@ -7,6 +7,16 @@ npm install
 npm start
 ```
 
+Build App:
+```
+npm run build
+```
+
+Deploy App:
+```
+npm run deploy
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
