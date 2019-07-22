@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/bing_x_rideshare/static/css/main.17ea2a0a.chunk.css",
+    "main.js": "/bing_x_rideshare/static/js/main.06340df8.chunk.js",
+    "main.js.map": "/bing_x_rideshare/static/js/main.06340df8.chunk.js.map",
+    "runtime~main.js": "/bing_x_rideshare/static/js/runtime~main.d5a04a8d.js",
+    "runtime~main.js.map": "/bing_x_rideshare/static/js/runtime~main.d5a04a8d.js.map",
+    "static/js/2.db17bacf.chunk.js": "/bing_x_rideshare/static/js/2.db17bacf.chunk.js",
+    "static/js/2.db17bacf.chunk.js.map": "/bing_x_rideshare/static/js/2.db17bacf.chunk.js.map",
+    "index.html": "/bing_x_rideshare/index.html",
+    "precache-manifest.f601957e86370b2f253a0801c5992fc5.js": "/bing_x_rideshare/precache-manifest.f601957e86370b2f253a0801c5992fc5.js",
+    "service-worker.js": "/bing_x_rideshare/service-worker.js",
+    "static/css/main.17ea2a0a.chunk.css.map": "/bing_x_rideshare/static/css/main.17ea2a0a.chunk.css.map",
+    "static/media/argon-react-white.png": "/bing_x_rideshare/static/media/argon-react-white.275a2629.png",
+    "static/media/argon-react.png": "/bing_x_rideshare/static/media/argon-react.f38ddea9.png",
+    "static/media/creativetim-white-slim.png": "/bing_x_rideshare/static/media/creativetim-white-slim.f7cb2d39.png",
+    "static/media/font-awesome.min.css": "/bing_x_rideshare/static/media/fontawesome-webfont.fee66e71.woff",
+    "static/media/github.svg": "/bing_x_rideshare/static/media/github.4ffd4fe7.svg",
+    "static/media/google.svg": "/bing_x_rideshare/static/media/google.87be59a1.svg",
+    "static/media/ill-2.svg": "/bing_x_rideshare/static/media/ill-2.594b1ee1.svg",
+    "static/media/img-1-1200x1000.jpg": "/bing_x_rideshare/static/media/img-1-1200x1000.1e7c70dc.jpg",
+    "static/media/img-2-1200x1000.jpg": "/bing_x_rideshare/static/media/img-2-1200x1000.ba449a06.jpg",
+    "static/media/landing.jpg": "/bing_x_rideshare/static/media/landing.0ec26478.jpg",
+    "static/media/nucleo.css": "/bing_x_rideshare/static/media/nucleo-icons.f82ec6ba.ttf",
+    "static/media/profile.jpg": "/bing_x_rideshare/static/media/profile.278a0d25.jpg",
+    "static/media/promo-1.png": "/bing_x_rideshare/static/media/promo-1.75f7ab18.png",
+    "static/media/team-1-800x800.jpg": "/bing_x_rideshare/static/media/team-1-800x800.53033970.jpg",
+    "static/media/team-2-800x800.jpg": "/bing_x_rideshare/static/media/team-2-800x800.dcfcf3b7.jpg",
+    "static/media/team-3-800x800.jpg": "/bing_x_rideshare/static/media/team-3-800x800.497bb359.jpg",
+    "static/media/team-4-800x800.jpg": "/bing_x_rideshare/static/media/team-4-800x800.23007132.jpg"
+  }
+}

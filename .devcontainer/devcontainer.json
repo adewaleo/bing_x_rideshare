@@ -1,8 +1,0 @@
-{
-    "name": "Frontend",
-    "appPort": 3000,
-    "extensions": [
-        "dbaeumer.vscode-eslint"
-    ],
-    "postCreateCommand": ["npm install", "npm start"]
-}
