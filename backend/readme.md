@@ -3,13 +3,8 @@
 ## Setting up the development environment (based on [azdev](https://github.com/Azure/azure-cli-dev-tools/blob/master/README.md))
 
 1. Install Python 3 from http://python.org. Please note that the version of Python that comes preinstalled on OSX is 2.7.
-2. Change directory to the root of the backend's source.
-   
-   On linux:
-   ```bash
-   cd backend
-   ```
-3. Create a new virtual environment for Python at the root of the `backend` directory. 
+2. Change directory to the root of the repo.
+3. Create a new virtual environment for Python at the root of the repo. 
    Virtual environments allow you to isolate dependencies for each of your python project. You can do this by running:
 
     ```BatchFile
@@ -46,9 +41,8 @@
 ## Run the development server
 
 1. Ensure that the virtual environment is activated, by running its activate script.
-2. Start the Flask App:
+2. Start the Flask App. First ensure that you are at the root directory:
    ```bash
-      cd ..  # move up a directory
       python backend/app.py
    ```
 3. Test the API using [postman](https://www.getpostman.com/products), [curl or requests](https://flask-restful.readthedocs.io/en/latest/quickstart.html#resourceful-routing).
