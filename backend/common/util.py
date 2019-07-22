@@ -1,5 +1,5 @@
 from flask_restful import abort
-from backend.resources.state import TODOS
+from resources.state import TODOS
 
 
 def abort_if_todo_doesnt_exist(todo_id):

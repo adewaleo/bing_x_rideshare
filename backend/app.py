@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
-from backend.resources.todo import Todo, TodoList
+from resources.todo import Todo, TodoList
 
 app = Flask(__name__)
 api = Api(app)

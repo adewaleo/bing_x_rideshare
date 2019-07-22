@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
-from backend.resources.state import TODOS
-from backend.common.util import abort_if_todo_doesnt_exist
+from resources.state import TODOS
+from common.util import abort_if_todo_doesnt_exist
 
 
 parser = reqparse.RequestParser()
