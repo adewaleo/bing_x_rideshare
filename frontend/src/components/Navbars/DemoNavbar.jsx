@@ -44,7 +44,7 @@ class DemoNavbar extends React.Component {
     return (
       <>
         <header className="header-global">
-          <Headroom>
+          <Headroom disableInlineStyles={true} disable={true}>
             <Navbar
               className="navbar-main navbar-transparent navbar-light headroom"
               expand="lg"
