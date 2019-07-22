@@ -51,22 +51,21 @@ class Hero extends React.Component {
                       style={{ width: "200px" }}
                     />
                     <p className="lead text-white">
-                      A beautiful Design System for Bootstrap 4. It's Free and
-                      Open Source.
+                      Welcome to the best of both worlds.
                     </p>
                     <div className="btn-wrapper mt-5">
                       <Button
                         className="btn-white btn-icon mb-3 mb-sm-0"
                         color="default"
-                        href="https://www.creative-tim.com/product/argon-design-system-react?ref=adsr-landing-page"
+                        href="#"
                         size="lg"
                       >
                         <span className="btn-inner--icon mr-1">
-                          <i className="ni ni-cloud-download-95" />
+                          <i className="ni ni-map-big" />
                         </span>
-                        <span className="btn-inner--text">Download React</span>
+                        <span className="btn-inner--text">Get Started</span>
                       </Button>{" "}
-                      <Button
+                      {/* <Button
                         className="btn-icon mb-3 mb-sm-0"
                         color="github"
                         href="https://github.com/creativetimofficial/argon-design-system-react"
@@ -80,17 +79,17 @@ class Hero extends React.Component {
                           <span className="text-warning mr-1">Star us</span>
                           on Github
                         </span>
-                      </Button>
+                      </Button> */}
                     </div>
                     <div className="mt-5">
                       <small className="text-white font-weight-bold mb-0 mr-2">
-                        *proudly coded by
+                        *A OneWeek Hackathon Project
                       </small>
                       <img
                         alt="..."
                         className="ml-1"
                         style={{ height: "28px" }}
-                        src={require("assets/img/brand/creativetim-white-slim.png")}
+                        src={require("assets/img/icons/common/microsoft.svg")}
                       />
                     </div>
                   </Col>
