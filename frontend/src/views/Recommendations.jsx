@@ -34,7 +34,6 @@ class Recommendations extends React.Component {
         <DemoNavbar />
         <main ref="main">
           <RecommendationsTitle />
-          {/* <TripInput /> */}
           <RecommendationsListView />
         </main>
         <CardsFooter />
