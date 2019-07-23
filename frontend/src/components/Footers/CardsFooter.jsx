@@ -134,7 +134,6 @@ class CardsFooter extends React.Component {
                   © {new Date().getFullYear()}{" "}
                   <a
                     href="/"
-                    target="_blank"
                   >
                     Hybrid Commute
                   </a>

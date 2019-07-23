@@ -77,7 +77,7 @@ class Hero extends React.Component {
                         </span>
                         <span className="btn-inner--text">
                           <span className="text-warning mr-1">Vote</span>
-                          for project
+                          for this project
                         </span>
                       </Button>
                     </div>
