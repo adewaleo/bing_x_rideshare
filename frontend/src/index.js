@@ -25,6 +25,8 @@ import "assets/scss/argon-design-system-react.scss";
 
 import Index from "views/Index.jsx";
 import About from "views/About.jsx";
+import Results from "views/Results.jsx";
+// import Details from "views/Details.jsx";
 import Components from "views/Components.jsx";
 import Landing from "views/examples/Landing.jsx";
 import Login from "views/examples/Login.jsx";
@@ -36,6 +38,8 @@ ReactDOM.render(
     <Switch>
       <Route path="/" exact render={props => <Index {...props} />} />
       <Route path="/about" exact render={props => <About {...props} />} />
+      <Route path="/results" exact render={props => <Results {...props} />} />
+      {/* <Route path="/details" exact render={props => <Details {...props} />} /> */}
       <Route path="/components" exact render={props => <Components {...props} />} />
       <Route path="/landing-page" exact render={props => <Landing {...props} />} />
       <Route path="/login-page" exact render={props => <Login {...props} />} />

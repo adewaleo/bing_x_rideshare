@@ -24,7 +24,8 @@ import { FormGroup,
   Input,
   Container,
   Row,
-  Col } from "reactstrap";
+  // Col
+} from "reactstrap";
 
   import TripInputTabs from "./TripInputTabs.jsx";
 
