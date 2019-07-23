@@ -18,7 +18,7 @@
 import React from "react";
 
 // reactstrap components
-// import { Container, Row } from "reactstrap";
+import { Container, Row } from "reactstrap";
 
 // core components
 import DemoNavbar from "components/Navbars/DemoNavbar.jsx";
@@ -26,25 +26,25 @@ import CardsFooter from "components/Footers/CardsFooter.jsx";
 
 // index page sections
 import Hero from "./IndexSections/Hero.jsx";
-// import Buttons from "./IndexSections/Buttons.jsx";
-// import Inputs from "./IndexSections/Inputs.jsx";
-// import CustomControls from "./IndexSections/CustomControls.jsx";
-// import Menus from "./IndexSections/Menus.jsx";
-// import Navbars from "./IndexSections/Navbars.jsx";
-// import Tabs from "./IndexSections/Tabs.jsx";
-// import Progress from "./IndexSections/Progress.jsx";
-// import Pagination from "./IndexSections/Pagination.jsx";
-// import Pills from "./IndexSections/Pills.jsx";
-// import Labels from "./IndexSections/Labels.jsx";
-// import Alerts from "./IndexSections/Alerts.jsx";
-// import Typography from "./IndexSections/Typography.jsx";
-// import Modals from "./IndexSections/Modals.jsx";
-// import Datepicker from "./IndexSections/Datepicker.jsx";
-// import TooltipPopover from "./IndexSections/TooltipPopover.jsx";
-// import Carousel from "./IndexSections/Carousel.jsx";
-// import Icons from "./IndexSections/Icons.jsx";
-// import Login from "./IndexSections/Login.jsx";
-// import Download from "./IndexSections/Download.jsx";
+import Buttons from "./IndexSections/Buttons.jsx";
+import Inputs from "./IndexSections/Inputs.jsx";
+import CustomControls from "./IndexSections/CustomControls.jsx";
+import Menus from "./IndexSections/Menus.jsx";
+import Navbars from "./IndexSections/Navbars.jsx";
+import Tabs from "./IndexSections/Tabs.jsx";
+import Progress from "./IndexSections/Progress.jsx";
+import Pagination from "./IndexSections/Pagination.jsx";
+import Pills from "./IndexSections/Pills.jsx";
+import Labels from "./IndexSections/Labels.jsx";
+import Alerts from "./IndexSections/Alerts.jsx";
+import Typography from "./IndexSections/Typography.jsx";
+import Modals from "./IndexSections/Modals.jsx";
+import Datepicker from "./IndexSections/Datepicker.jsx";
+import TooltipPopover from "./IndexSections/TooltipPopover.jsx";
+import Carousel from "./IndexSections/Carousel.jsx";
+import Icons from "./IndexSections/Icons.jsx";
+import Login from "./IndexSections/Login.jsx";
+import Download from "./IndexSections/Download.jsx";
 
 class Index extends React.Component {
   componentDidMount() {
@@ -58,7 +58,7 @@ class Index extends React.Component {
         <DemoNavbar />
         <main ref="main">
           <Hero />
-          {/* <Buttons />
+          <Buttons />
           <Inputs />
           <section className="section">
             <Container>
@@ -88,7 +88,7 @@ class Index extends React.Component {
           <Carousel />
           <Icons />
           <Login />
-          <Download /> */}
+          <Download />
         </main>
         <CardsFooter />
       </>
