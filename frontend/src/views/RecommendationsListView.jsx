@@ -21,14 +21,19 @@ import RecommendationsListViewItem from "./RecommendationsListViewItem";
 import { Row, Col } from "reactstrap";
 
 class RecommendationsListView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.route = {id: "1234", segments: [{mode: "transit"}]};
+  }
+
   render() {
     return (
       <>
       <Row className="py-md align-items-center">
         <Col lg="12">
-          <RecommendationsListViewItem />
-          <RecommendationsListViewItem />
-          <RecommendationsListViewItem />
+          <RecommendationsListViewItem route={this.route} />
+          <RecommendationsListViewItem route={this.route} />
+          <RecommendationsListViewItem route={this.route} />
         </Col>
       </Row>
       </>

@@ -35,12 +35,30 @@ class RecommendationsListViewItem extends React.Component {
       <>
         <Container>
           <Row className="py-3 align-items-center">
-            <Card className="shadow" style={{margin: "0 auto"}}>
+            <Card className="shadow" style={{margin: "0 auto", minWidth: '80%'}}>
               <CardBody>
-                <p className="description">
-                  Choose this option if you want us to optimize for time.
-                  This may mean that your costs may be slightly higher.
-                </p>
+                <div className="icons-container blur-item on-screen">
+                  <h4 className="heading-title text-warning mb-0">Option 1</h4>
+                  <section className="section-components">
+                    <span className="text-uppercase badge badge-primary badge-pill">Quickest</span>
+                    <span className="text-uppercase badge badge-success badge-pill">Cheapest</span>
+                  </section>
+                  <ul style={{margin: 0, padding: "1rem 0"}}>
+                    {this.props.route.segments.map((segment) =>
+                    <li key={segment.toString()} value={segment} style={{listStyleType: 'none'}}>
+                      <i className="fa fa-clock-o" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                      <i className="fa fa-car" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                      <i className="fa fa-female" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                      <i className="fa fa-bus" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                    </li>
+                    )}
+                  </ul>
+                  <span className="description">10 mins</span>
+                </div>
+                <div>
+                  <span className="description">13:45 - 13:55</span>
+                  <span className="description">$3.14</span>
+                </div>
               </CardBody>
             </Card>
           </Row>
