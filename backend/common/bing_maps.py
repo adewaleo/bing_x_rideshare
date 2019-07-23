@@ -148,7 +148,6 @@ class BingMaps(object):
         url = "http://dev.virtualearth.net/REST/v1/Locations"
         params = {
             "query": location_str,
-            "inclnb": 1,
             "key": self.key
         }
         response_dict = requests.get(url, params).json()
@@ -157,6 +156,8 @@ class BingMaps(object):
 
     def get_location_from_string(self, location_str):
         """
+        Get's most likely address for query string from Bing Maps API and creates location object.
+
         :param location_str: Place we are trying to get concrete location for
         :type location_str: str
         :return: Returns location of highest confidence if one exists
@@ -169,6 +170,31 @@ class BingMaps(object):
             raise BingApiError("No locations match the query string")
 
         return BingLocation.from_location_resource(locations[0])
+
+    def get_location_from_point(self, latitude, longitude):
+        """
+        Get Location object from point. This is helpful for getting the address of a point.
+        Please do not ABUSE this method as it ALWAYS calls the Bing API.
+
+        :param latitude: Latitude, first index in point array
+        :type latitude: float
+        :param longitude: Longitude, second index in point array
+        :type longitude: float
+        :return: Returns location
+        :rtype: BingLocation
+        :raises: BingApiError if no valid location was returned
+        """
+
+        latitude, longitude = str(latitude), str(longitude)
+        point_str = longitude + "," + latitude
+
+        url = "http://dev.virtualearth.net/REST/v1/Locations/{point}".format(point=point_str)
+        params = {
+            "key": self.key
+        }
+        response_dict = requests.get(url, params).json()
+        location = response_dict["resourceSets"][0]["resources"][0]
+        return BingLocation.from_location_resource(location)
 
     def get_possible_locations_from_string(self, location_str):
         """
