@@ -26,6 +26,7 @@ import CardsFooter from "components/Footers/CardsFooter.jsx";
 
 // index page sections
 import Hero from "./IndexSections/Hero.jsx";
+import TripInput from "./TripInput.jsx";
 // import Buttons from "./IndexSections/Buttons.jsx";
 // import Inputs from "./IndexSections/Inputs.jsx";
 // import CustomControls from "./IndexSections/CustomControls.jsx";
@@ -58,6 +59,7 @@ class Index extends React.Component {
         <DemoNavbar />
         <main ref="main">
           <Hero />
+          <TripInput />
           {/* <Buttons />
           <Inputs />
           <section className="section">
