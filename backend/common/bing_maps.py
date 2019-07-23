@@ -3,12 +3,13 @@
 # Routes: https://docs.microsoft.com/en-us/bingmaps/rest-services/routes/calculate-a-route
 # RouteData: https://docs.microsoft.com/en-us/bingmaps/rest-services/routes/route-data.
 
+import os
 import datetime
 import requests
 from yaml import safe_load
 from util import dict_to_pretty_str, is_correct_type_or_err
 
-BING_API_CREDENTIALS = "bing.key.yaml"
+BING_API_CREDENTIALS = os.path.abspath(os.path.join(os.path.dirname(__file__), "bing.key.yaml"))
 
 def _get_api_key_from_file(filename=BING_API_CREDENTIALS):
     with open(filename, 'r') as config_file:
@@ -20,7 +21,14 @@ class BingApiError(Exception):
     pass
 
 
-class BingDateTime(object):
+class BingType(object):
+    def __str__(self):
+        try:
+            return dict_to_pretty_str(str(self.__dict__))
+        except Exception as e:
+            return str(self.__dict__)
+
+class BingDateTime(BingType):
 
     def __init__(self, date_time):
         self.date_time = date_time
@@ -37,7 +45,7 @@ class BingDateTime(object):
         return BingDateTime(time_now)
 
 
-class BingDistance(object):
+class BingDistance(BingType):
     def __init__(self, value, unit):
         self.value = value
         self.unit = unit.lower()
@@ -46,7 +54,7 @@ class BingDistance(object):
             raise ValueError("The unit must be 'mile' or 'Mile'.")
 
 
-class BingDuration(datetime.timedelta):
+class BingDuration(datetime.timedelta, BingType):
 
     @staticmethod
     def from_value_and_unit(value, unit):
@@ -61,12 +69,10 @@ class BingDuration(datetime.timedelta):
         else:
             raise BingApiError("Error identifying unit: {}".format(unit))
 
-
-
-class BingLocation(object):
+class BingLocation(BingType):
     def __init__(self, point, address):
         self.point_list = point  # list of latitude and longiturde
-        self.point_as_str = ",".join(self.point_list)
+        self.point_as_str = ",".join([str(coord) for coord in self.point_list])
         self.address_str = address
 
     @staticmethod
@@ -116,7 +122,7 @@ class BingLocation(object):
         return results
 
 
-class BingDrivingRoute(object):
+class BingDrivingRoute(BingType):
 
     def __init__(self, source, dest, distance, travel_duration, departure_date_time=None):
         is_correct_type_or_err(source, BingLocation)
@@ -186,7 +192,7 @@ class BingMaps(object):
         """
 
         latitude, longitude = str(latitude), str(longitude)
-        point_str = longitude + "," + latitude
+        point_str = latitude + "," + longitude
 
         url = "http://dev.virtualearth.net/REST/v1/Locations/{point}".format(point=point_str)
         params = {
@@ -225,7 +231,8 @@ class BingMaps(object):
         try:
             is_correct_type_or_err(source_location, BingLocation)
             is_correct_type_or_err(dest_location, BingLocation)
-            is_correct_type_or_err(departure_date_time, BingDateTime)
+            if departure_date_time:
+                is_correct_type_or_err(departure_date_time, BingDateTime)
         except TypeError as e:
             raise BingApiError(e)
 
@@ -259,4 +266,25 @@ class BingMaps(object):
 
 
 
+if __name__ == "__main__":
+    # run python common/bing_maps.py
+
+    map_api = BingMaps()
+
+    query = input("Enter the query string: ").strip()
+    print([(tup[0].address_str, tup[1]) for tup in map_api.get_possible_locations_from_string(query)])
+
+    source = input("Enter the source address: ").strip()
+    destination = input("Enter the destination address: ").strip()
+
+    source = map_api.get_location_from_string(source)
+    destination = map_api.get_location_from_string(destination)
+
+    print(str(map_api.get_driving_route(source, destination)))
+
+    print("Source {} has latitude {} and longitude {}.".format(source, source.point_list[0], source.point_list[1]))
+
+    print("Getting point address from latitude and longitude")
+
+    print(map_api.get_location_from_point(source.point_list[0], source.point_list[1]).address_str)
 
