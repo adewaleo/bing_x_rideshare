@@ -7,7 +7,7 @@ import os
 import datetime
 import requests
 from yaml import safe_load
-from util import dict_to_pretty_str, is_correct_type_or_err
+from common.util import dict_to_pretty_str, is_correct_type_or_err
 
 BING_API_CREDENTIALS = os.path.abspath(os.path.join(os.path.dirname(__file__), "bing.key.yaml"))
 
