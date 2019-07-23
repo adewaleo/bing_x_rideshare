@@ -36,8 +36,9 @@ class CardsFooter extends React.Component {
   render() {
     return (
       <>
-        <footer className="footer has-cards">
-          <Container className="container-lg">
+        <footer className="footer">
+        {/* <footer className="footer has-cards"> */}
+          {/* <Container className="container-lg">
             <Row>
               <Col className="mb-5 mb-md-0" md="6">
                 <Card className="card-lift--hover shadow border-0">
@@ -60,22 +61,22 @@ class CardsFooter extends React.Component {
                 </Card>
               </Col>
             </Row>
-          </Container>
+          </Container> */}
           <Container>
             <Row className="row-grid align-items-center my-md">
               <Col lg="6">
                 <h3 className="text-primary font-weight-light mb-2">
-                  Thank you for supporting us!
+                  <a href="https://aka.ms/bing-rideshare/home" target="_blank">aka.ms/bing-rideshare/home</a>
                 </h3>
                 <h4 className="mb-0 font-weight-light">
-                  Let's get in touch on any of these platforms.
+                  Thank you for voting for us!
                 </h4>
               </Col>
               <Col className="text-lg-center btn-wrapper" lg="6">
                 <Button
                   className="btn-neutral btn-icon-only btn-round"
                   color="twitter"
-                  href="https://twitter.com/creativetim"
+                  href="https://twitter.com/search?q=%23hybridcommute"
                   id="tooltip475038074"
                   size="lg"
                   target="_blank"
@@ -83,9 +84,9 @@ class CardsFooter extends React.Component {
                   <i className="fa fa-twitter" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip475038074">
-                  Follow us
+                  Tweet us
                 </UncontrolledTooltip>
-                <Button
+                {/* <Button
                   className="btn-neutral btn-icon-only btn-round ml-1"
                   color="facebook"
                   href="https://www.facebook.com/creativetim"
@@ -97,8 +98,8 @@ class CardsFooter extends React.Component {
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip837440414">
                   Like us
-                </UncontrolledTooltip>
-                <Button
+                </UncontrolledTooltip> */}
+                {/* <Button
                   className="btn-neutral btn-icon-only btn-round ml-1"
                   color="dribbble"
                   href="https://dribbble.com/creativetim"
@@ -110,11 +111,11 @@ class CardsFooter extends React.Component {
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip829810202">
                   Follow us
-                </UncontrolledTooltip>
+                </UncontrolledTooltip> */}
                 <Button
                   className="btn-neutral btn-icon-only btn-round ml-1"
                   color="github"
-                  href="https://github.com/creativetimofficial"
+                  href="https://github.com/adewaleo/bing_x_rideshare"
                   id="tooltip495507257"
                   size="lg"
                   target="_blank"
@@ -122,7 +123,7 @@ class CardsFooter extends React.Component {
                   <i className="fa fa-github" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip495507257">
-                  Star on Github
+                  Find us on Github
                 </UncontrolledTooltip>
               </Col>
             </Row>
@@ -132,48 +133,47 @@ class CardsFooter extends React.Component {
                 <div className="copyright">
                   © {new Date().getFullYear()}{" "}
                   <a
-                    href="https://www.creative-tim.com?ref=adsr-footer"
+                    href="/"
                     target="_blank"
                   >
-                    Creative Tim
+                    Hybrid Commute
                   </a>
                   .
                 </div>
               </Col>
               <Col md="6">
                 <Nav className="nav-footer justify-content-end">
-                  <NavItem>
+                  {/* <NavItem>
                     <NavLink
                       href="https://www.creative-tim.com?ref=adsr-footer"
                       target="_blank"
                     >
                       Creative Tim
                     </NavLink>
-                  </NavItem>
+                  </NavItem> */}
                   <NavItem>
                     <NavLink
-                      href="https://www.creative-tim.com/presentation?ref=adsr-footer"
-                      target="_blank"
+                      href="about"
                     >
-                      About Us
+                      About
                     </NavLink>
                   </NavItem>
-                  <NavItem>
+                  {/* <NavItem>
                     <NavLink
                       href="http://blog.creative-tim.com?ref=adsr-footer"
                       target="_blank"
                     >
                       Blog
                     </NavLink>
-                  </NavItem>
-                  <NavItem>
+                  </NavItem> */}
+                  {/* <NavItem>
                     <NavLink
                       href="https://github.com/creativetimofficial/argon-design-system-react/blob/master/LICENSE.md"
                       target="_blank"
                     >
                       MIT License
                     </NavLink>
-                  </NavItem>
+                  </NavItem> */}
                 </Nav>
               </Col>
             </Row>

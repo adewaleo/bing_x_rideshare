@@ -21,13 +21,13 @@ import { Link } from "react-router-dom";
 // import Headroom from "react-headroom";
 // reactstrap components
 import {
-  Button,
+  // Button,
   UncontrolledCollapse,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  UncontrolledDropdown,
-  Media,
+  // DropdownMenu,
+  // DropdownItem,
+  // DropdownToggle,
+  // UncontrolledDropdown,
+  // Media,
   NavbarBrand,
   Navbar,
   NavItem,
