@@ -59,13 +59,13 @@ class RecommendationsListViewItem extends React.Component {
                       </ul>
                     </div>
                     <div>
-                      <p className="description">13:45 - 13:55</p>
-                      <p className="description">10 mins</p>
-                      <p className="description">$3.14</p>
+                      <span className="lead" style={{marginRight: "2rem"}}>13:45 - 13:55</span>
+                      <span className="lead" style={{marginRight: "2rem"}}>10 minutes</span>
+                      <span className="lead" style={{marginRight: "2rem"}}>$3.14</span>
                     </div>
                   </Col>
                   <Col md="2">
-                    <h3>View route details</h3>
+                    <button type="button" className="btn-1 ml-1 btn btn-outline-warning">Details</button>
                   </Col>
                 </Row>
               </CardBody>
