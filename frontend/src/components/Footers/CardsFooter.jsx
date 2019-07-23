@@ -72,7 +72,7 @@ class CardsFooter extends React.Component {
                   Thank you for voting for us!
                 </h4>
               </Col>
-              <Col className="text-lg-center btn-wrapper" lg="6">
+              <Col className="text-lg-right btn-wrapper" lg="6">
                 <Button
                   className="btn-neutral btn-icon-only btn-round"
                   color="twitter"
