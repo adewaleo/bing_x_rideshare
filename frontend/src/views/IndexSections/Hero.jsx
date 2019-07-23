@@ -51,7 +51,7 @@ class Hero extends React.Component {
                       style={{ width: "200px" }}
                     />
                     <p className="lead text-white">
-                      Welcome to the best of both worlds.
+                    Combine transit and ride-share. Optimize for cost and time. <strong>Welcome to the best of both worlds.</strong>
                     </p>
                     <div className="btn-wrapper mt-5">
                       <Button
