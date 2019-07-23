@@ -55,17 +55,6 @@ class Hero extends React.Component {
                     </p>
                     <div className="btn-wrapper mt-5">
                       <Button
-                        className="btn-white btn-icon mb-3 mb-sm-0"
-                        color="default"
-                        href="#"
-                        size="lg"
-                      >
-                        <span className="btn-inner--icon mr-1">
-                          <i className="ni ni-map-big" />
-                        </span>
-                        <span className="btn-inner--text">Get Started</span>
-                      </Button>{" "}
-                      <Button
                         className="btn-icon mb-3 mb-sm-0"
                         color="github"
                         href="https://aka.ms/bing-rideshare/home"
