@@ -1,11 +1,12 @@
 # Location from Query: https://docs.microsoft.com/en-us/bingmaps/rest-services/locations/find-a-location-by-query
 # Location and Area Types: https://docs.microsoft.com/en-us/bingmaps/rest-services/common-parameters-and-types/location-and-area-types
 # Routes: https://docs.microsoft.com/en-us/bingmaps/rest-services/routes/calculate-a-route
+# RouteData: https://docs.microsoft.com/en-us/bingmaps/rest-services/routes/route-data.
 
-import json
+import datetime
 import requests
 from yaml import safe_load
-from util import dict_to_pretty_str
+from util import dict_to_pretty_str, is_correct_type_or_err
 
 BING_API_CREDENTIALS = "bing.key.yaml"
 
@@ -14,8 +15,53 @@ def _get_api_key_from_file(filename=BING_API_CREDENTIALS):
         config = safe_load(config_file)
     return config["queryKey"]
 
+
 class BingApiError(Exception):
     pass
+
+
+class BingDateTime(object):
+
+    def __init__(self, date_time):
+        self.date_time = date_time
+        date = self.date_time.strftime("%m/%d/%y")
+        time = self.date_time.strftime("%H:%M:%S")
+        self.date_time_str = date + " " + time
+
+    def __str__(self):
+        return self.date_time_str
+
+    @staticmethod
+    def now():
+        time_now = datetime.datetime.now()
+        return BingDateTime(time_now)
+
+
+class BingDistance(object):
+    def __init__(self, value, unit):
+        self.value = value
+        self.unit = unit.lower()
+
+        if self.unit != "mile":
+            raise ValueError("The unit must be 'mile' or 'Mile'.")
+
+
+class BingDuration(datetime.timedelta):
+
+    @staticmethod
+    def from_value_and_unit(value, unit):
+        if unit.lower() == "second":
+            return BingDuration(seconds=value)
+        if unit.lower() == "minute":
+            return BingDuration(minutes=value)
+        if unit.lower() == "hour":
+            return BingDuration(hours=value)
+        if unit.lower() == "day":
+            return BingDuration(days=value)
+        else:
+            raise BingApiError("Error identifying unit: {}".format(unit))
+
+
 
 class BingLocation(object):
     def __init__(self, point, address):
@@ -70,7 +116,28 @@ class BingLocation(object):
         return results
 
 
+class BingDrivingRoute(object):
 
+    def __init__(self, source, dest, distance, travel_duration, departure_date_time=None):
+        is_correct_type_or_err(source, BingLocation)
+        is_correct_type_or_err(dest, BingLocation)
+        is_correct_type_or_err(distance, BingDistance)
+        is_correct_type_or_err(travel_duration, BingDuration)
+        if departure_date_time:
+            is_correct_type_or_err(departure_date_time, BingDateTime)
+
+        self.source = source
+        self.dest = dest
+        self.distance = distance
+        self.travel_duration = travel_duration  # includes traffic time if applicable by API
+        self.time_requested = departure_date_time
+
+    @staticmethod
+    def from_route_and_request_info(route_resource, source_location, dest_location, departure_date_time=None):
+        distance = BingDistance(value=route_resource["travelDistance"], unit=route_resource["distanceUnit"])
+        duration = BingDuration.from_value_and_unit(value=route_resource["travelDurationTraffic"], unit=route_resource["durationUnit"])
+
+        return BingDrivingRoute(source_location, dest_location, distance=distance, travel_duration=duration, departure_date_time=None)
 
 
 class BingMaps(object):
@@ -117,6 +184,52 @@ class BingMaps(object):
 
         return BingLocation.multiple_from_location_resources(locations)
 
+
+    def get_driving_route(self, source_location, dest_location, departure_date_time=None):
+        """
+        :param source_location:
+        :type BingLocation
+        :param dest_location:
+        :type BingLocation
+        :param departure_date_time:
+        :type BingDateTime
+        :return:
+        """
+
+        try:
+            is_correct_type_or_err(source_location, BingLocation)
+            is_correct_type_or_err(dest_location, BingLocation)
+            is_correct_type_or_err(departure_date_time, BingDateTime)
+        except TypeError as e:
+            raise BingApiError(e)
+
+        # driving route example https://docs.microsoft.com/en-us/bingmaps/rest-services/examples/driving-route-example
+        url = "http://dev.virtualearth.net/REST/V1/Routes/Driving"
+        params = {
+            "waypoint.0": source_location.point_as_str,  # source
+            "waypoint.1": dest_location.point_as_str,    # destination
+            "distanceUnit": "Mile",
+            "optimize": "timeWithTraffic",
+            "key": self.key
+        }
+
+        if departure_date_time:
+            params["datetime"] = str(departure_date_time),
+            params["timeType"] = "Departure"
+
+        response_dict = requests.get(url, params).json()
+        try:
+            route = response_dict["resourceSets"][0]["resources"][0]
+        except IndexError:
+            error = response_dict.get("errorDetails",
+                                      "No route found for specified source '{}' and dest '{}'."
+                                      .format(source_location.address_str, dest_location.address_str))
+            raise BingApiError(error)
+
+
+        return BingDrivingRoute.from_route_and_request_info(route, source_location=source_location,
+                                                            dest_location=dest_location,
+                                                            departure_date_time=departure_date_time)
 
 
 
