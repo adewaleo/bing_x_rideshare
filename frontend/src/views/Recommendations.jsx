@@ -16,28 +16,31 @@
 
 */
 import React from "react";
-// reactstrap components
-import { Container, Row, Col } from "reactstrap";
 
-class ResultsTitle extends React.Component {
+// reactstrap components
+// import { Container, Row, Col } from "reactstrap";
+
+// core components
+import DemoNavbar from "components/Navbars/DemoNavbar.jsx";
+import CardsFooter from "components/Footers/CardsFooter.jsx";
+
+import RecommendationsTitle from "./RecommendationsTitle.jsx";
+import RecommendationsListView from "./RecommendationsListView.jsx";
+
+class Recommendations extends React.Component {
   render() {
     return (
       <>
-        <section className="bg-gradient-orange">
-          <Container className="pt-lg pb-100">
-            <Row className="text-center justify-content-center">
-              <Col lg="10">
-                <h2 className="display-3 text-white">Suggested Routes</h2>
-                <p className="lead text-white">
-                  Here's what we've got for you...
-                </p>
-              </Col>
-            </Row>
-          </Container>
-        </section>
+        <DemoNavbar />
+        <main ref="main">
+          <RecommendationsTitle />
+          {/* <TripInput /> */}
+          <RecommendationsListView />
+        </main>
+        <CardsFooter />
       </>
     );
   }
 }
 
-export default ResultsTitle;
+export default Recommendations;
