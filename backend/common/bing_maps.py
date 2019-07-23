@@ -266,7 +266,7 @@ class BingMaps(object):
 
 
 
-if __name__ == "__main__":
+def main_method():
     # run python common/bing_maps.py
 
     map_api = BingMaps()
