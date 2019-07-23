@@ -26,7 +26,7 @@ import { Card,
   // TabPane,
   Container,
   Row,
-  // Col
+  Col
 } from "reactstrap";
 
 class RecommendationsListViewItem extends React.Component {
@@ -37,28 +37,37 @@ class RecommendationsListViewItem extends React.Component {
           <Row className="py-3 align-items-center">
             <Card className="shadow" style={{margin: "0 auto", minWidth: '80%'}}>
               <CardBody>
-                <div className="icons-container blur-item on-screen">
-                  <h4 className="heading-title text-warning mb-0">Option 1</h4>
-                  <section className="section-components">
-                    <span className="text-uppercase badge badge-primary badge-pill">Quickest</span>
-                    <span className="text-uppercase badge badge-success badge-pill">Cheapest</span>
-                  </section>
-                  <ul style={{margin: 0, padding: "1rem 0"}}>
-                    {this.props.route.segments.map((segment) =>
-                    <li key={segment.toString()} value={segment} style={{listStyleType: 'none'}}>
-                      <i className="fa fa-clock-o" style={{fontSize: "3rem", marginRight: "2rem"}} />
-                      <i className="fa fa-car" style={{fontSize: "3rem", marginRight: "2rem"}} />
-                      <i className="fa fa-female" style={{fontSize: "3rem", marginRight: "2rem"}} />
-                      <i className="fa fa-bus" style={{fontSize: "3rem", marginRight: "2rem"}} />
-                    </li>
-                    )}
-                  </ul>
-                  <span className="description">10 mins</span>
-                </div>
-                <div>
-                  <span className="description">13:45 - 13:55</span>
-                  <span className="description">$3.14</span>
-                </div>
+                <Row className=" align-items-center justify-content-md-between">
+                  <Col md="10">
+                    <div className="icons-container blur-item on-screen">
+                      <h4 className="heading-title text-warning mb-0">Option 1</h4>
+                      <section className="section-components">
+                        <span className="text-uppercase badge badge-primary badge-pill">Quickest</span>
+                        <span className="text-uppercase badge badge-success badge-pill">Cheapest</span>
+                        <span className="text-uppercase badge badge-danger badge-pill">Expensive</span>
+                        <span className="text-uppercase badge badge-warning badge-pill">Slowest</span>
+                      </section>
+                      <ul style={{margin: 0, padding: "1rem 0"}}>
+                        {this.props.route.segments.map((segment) =>
+                        <li key={segment.toString()} value={segment} style={{listStyleType: 'none'}}>
+                          <i className="fa fa-clock-o" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                          <i className="fa fa-car" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                          <i className="fa fa-female" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                          <i className="fa fa-bus" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                        </li>
+                        )}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="description">13:45 - 13:55</p>
+                      <p className="description">10 mins</p>
+                      <p className="description">$3.14</p>
+                    </div>
+                  </Col>
+                  <Col md="2">
+                    <h3>View route details</h3>
+                  </Col>
+                </Row>
               </CardBody>
             </Card>
           </Row>
