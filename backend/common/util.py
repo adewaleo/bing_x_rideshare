@@ -13,3 +13,9 @@ def dict_to_pretty_str(value):
 def is_correct_type_or_err(obj, cls):
     if not isinstance(obj, cls):
         raise TypeError("{} is not an instance of type {}".format(obj, cls))
+
+def handle_error(ex=None, status_code=400, message=None):
+    data = {
+        "message": message or ex.message if hasattr(ex, 'message') else str(ex)
+    }
+    abort(status_code, **data)

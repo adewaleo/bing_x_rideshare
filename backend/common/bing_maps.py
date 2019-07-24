@@ -4,6 +4,7 @@
 # RouteData: https://docs.microsoft.com/en-us/bingmaps/rest-services/routes/route-data.
 
 import os
+import sys
 import datetime
 import requests
 from yaml import safe_load
@@ -122,6 +123,33 @@ class BingLocation(BingType):
         return results
 
 
+class BingDepartArrive(BingType):
+    def __init__(self, mt=None, names=None, coords=None):
+        self.manType=mt
+        self.names = names
+        self.coords = coords
+
+
+class BingWalkSegment(BingType):
+    def __init__(self, coords = None, mantype= None,dist= None,duration=None,cost= None):
+        self.coords = coords
+        self.manType = mantype
+        self.dist = dist
+        self.duration = duration
+        self.cost = 0
+
+
+class BingTransportSegment(BingType):
+    def __init__(self, typeoftransport = None, departdetails = None, arrivedetails = None, mantype= None,text= None, dist= None,duration=None, txt = None, cost = None):
+        self.typeofTransport = typeoftransport
+        self.departDetails = departdetails
+        self.arriveDetails = arrivedetails
+        self.dist = dist
+        self.duration = duration
+        self.manType = mantype
+        self.text = txt
+
+
 class BingDrivingRoute(BingType):
 
     def __init__(self, source, dest, distance, travel_duration, departure_date_time=None):
@@ -157,7 +185,13 @@ class BingMaps(object):
             "key": self.key
         }
         response_dict = requests.get(url, params).json()
-        locations = response_dict["resourceSets"][0]["resources"]
+        try:
+            locations = response_dict["resourceSets"][0]["resources"]
+        except IndexError:
+            error = response_dict.get("errorDetails",
+                                      "No location found for query '{}'."
+                                      .format(location_str))
+            raise BingApiError(error)
         return locations
 
     def get_location_from_string(self, location_str):
@@ -199,8 +233,61 @@ class BingMaps(object):
             "key": self.key
         }
         response_dict = requests.get(url, params).json()
-        location = response_dict["resourceSets"][0]["resources"][0]
+
+        # print(response_dict, sys.stderr)
+
+        try:
+            location = response_dict["resourceSets"][0]["resources"][0]
+        except IndexError:
+            error = response_dict.get("errorDetails",
+                                      "No location found for lat '{}' and long '{}'."
+                                      .format(latitude, longitude))
+            raise BingApiError(error)
         return BingLocation.from_location_resource(location)
+
+
+    def get_segments(self, source, destination):
+        url = "http://dev.virtualearth.net/REST/v1/Routes/Transit"
+        params = {
+            "wayPoint.1": source,
+            "wayPoint.2": destination,
+            "distanceUnit": "Mile",
+            "dateTime": "07/24/2019 05:42:00",
+            "travelMode": "Transit",
+            "timeType": "Departure",
+            "key": BING_API_KEY
+        }
+        response_dict = requests.get(url, params).json()
+        walkSegmentResults = []
+        transportSegmentResults = []
+        segments = response_dict["resourceSets"][0]["resources"][0]["routeLegs"][0]["itineraryItems"]
+
+        for segmentItem in segments:
+            if 'childItineraryItems' not in segmentItem:
+                walkSegment = BingWalkSegment()
+                walkSegment.coords = segmentItem["maneuverPoint"]["coordinates"]
+                walkSegment.manType = segmentItem["details"][0]["maneuverType"]
+                walkSegment.dist = segmentItem["travelDistance"]
+                walkSegment.duration = segmentItem["travelDuration"]
+                walkSegmentResults.append(walkSegment)
+            else:
+                transportSegment = BingTransportSegment()
+                transportSegment.manType = segmentItem["details"][0]["maneuverType"]
+                transportSegment.dist = segmentItem["travelDistance"]
+                transportSegment.duration = segmentItem["travelDuration"]
+                transportSegment.text = segmentItem["instruction"]["text"]
+                depart = BingDepartArrive()
+                depart.manType = segmentItem["childItineraryItems"][0]["details"][0]["maneuverType"]
+                depart.names = segmentItem["childItineraryItems"][0]["instruction"]["text"]
+                depart.coords = segmentItem["childItineraryItems"][0]["maneuverPoint"]["coordinates"]
+                arrive = BingDepartArrive()
+                arrive.manType = segmentItem["childItineraryItems"][1]["details"][0]["maneuverType"]
+                arrive.names = segmentItem["childItineraryItems"][1]["instruction"]["text"]
+                arrive.coords = segmentItem["childItineraryItems"][1]["maneuverPoint"]["coordinates"]
+                transportSegment.departDetails = depart
+                transportSegment.arriveDetails = arrive
+                transportSegmentResults.append(transportSegment)
+        return walkSegmentResults, transportSegmentResults
 
     def get_possible_locations_from_string(self, location_str):
         """
@@ -264,8 +351,6 @@ class BingMaps(object):
                                                             dest_location=dest_location,
                                                             departure_date_time=departure_date_time)
 
-
-
 def main_method():
     # run python common/bing_maps.py
 
@@ -288,3 +373,16 @@ def main_method():
 
     print(map_api.get_location_from_point(source.point_list[0], source.point_list[1]).address_str)
 
+    print("---- Getting segments of a transit route  -----")
+
+    transitsource = input("Enter the source address: ").strip()
+    transitdestination = input("Enter the destination address: ").strip()
+
+    transitsource = map_api.get_location_from_string(transitsource)
+    transitdestination = map_api.get_location_from_string(transitdestination)
+
+    walkSegments, transportSegments = map_api.get_segments(transitsource, transitdestination)
+    print("******* Walk Segments in the Route *******")
+    print(walkSegments)
+    print("******* Transport Segments in the Route *******")
+    print(transportSegments)
