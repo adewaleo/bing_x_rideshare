@@ -5,10 +5,12 @@
 
 import os
 import sys
+import functools
 import datetime
 import requests
 from yaml import safe_load
 from common.util import dict_to_pretty_str, is_correct_type_or_err
+from common.rideshare_estimates import LyftEstimate, UberEstimate
 
 BING_API_CREDENTIALS = os.path.abspath(os.path.join(os.path.dirname(__file__), "bing.key.yaml"))
 
@@ -153,11 +155,12 @@ class BingDepartArrive(BingType):
 
 
 class BingWalkSegment(BingType):
-    def __init__(self, coords = None, mantype= None,dist= None,duration=None,cost= None):
+    def __init__(self, coords = None, mantype= None, dist= None, duration=None, cost= None):
         self.coords = coords
         self.manType = mantype
         self.dist = dist
         self.duration = duration
+        self.cost = cost
 
 
 class BingTransportSegment(BingType):
@@ -194,6 +197,56 @@ class BingDrivingRoute(BingType):
 
         return BingDrivingRoute(source_location, dest_location, distance=distance, travel_duration=duration, departure_date_time=None)
 
+class RideShareRoute(BingDrivingRoute):
+
+    def __init__(self, *args, **kwargs):
+        self.fare = kwargs["fare"]
+        self.type = kwargs["type"].lower()
+
+        is_correct_type_or_err(self.fare, float)
+        if self.type not in ["lyft", "uberx"]:
+            raise BingApiError("Internal Error: ride share route initialized with wrong type '{}'."
+                               "Should be lyft or uberx".format(self.type))
+
+        super(RideShareRoute, self).__init__(*args, **kwargs)
+
+    @staticmethod
+    def from_driving_route(driving_route):
+        return RideShareRoute(source=driving_route.source, dest=driving_route.dest, distance=driving_route.distance, )
+
+    @staticmethod
+    def from_source_dest(source, dest, depart_time=None):
+        bing_maps = BingMaps()
+        depart_time = depart_time or BingDateTime.now()
+
+        driving_route = bing_maps.get_driving_route(source, dest, depart_time)
+        distance = driving_route.distance
+        duration = driving_route.travel_duration
+
+        lyft_fare = LyftEstimate.estimate_fare(distance.value, duration.total_seconds())
+        uber_fare = UberEstimate.estimate_fare(distance.value, duration.total_seconds())
+
+        uber_route = RideShareRoute(source, dest, distance,
+                                         duration, depart_time, fare=lyft_fare, type="uberx")
+        lyft_route = RideShareRoute(source, dest, distance,
+                                         duration, depart_time, fare=uber_fare, type="uberx")
+
+        return dict(uber=uber_route, lyft=lyft_route)
+
+
+class BingTransitRoute(BingType):
+
+    def __init__(self, segments):
+        is_correct_type_or_err(segments, list)
+        for segment in segments:
+            # each segment must be a bing walk segment and bing transport segment
+            try:
+                is_correct_type_or_err(segment, BingWalkSegment)
+            except ValueError:
+                is_correct_type_or_err(segment, BingTransportSegment)
+
+        self.segments = segments
+        self.fare = functools.reduce(lambda sum, segment: sum + segment.cost, segments, 0)
 
 class BingMaps(object):
     def __init__(self, api_key=None):
