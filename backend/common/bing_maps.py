@@ -407,7 +407,7 @@ def main_method():
 
     source = map_api.get_location_from_string(source)
     destination = map_api.get_location_from_string(destination)
-    """
+    
     print(str(map_api.get_driving_route(source, destination)))
 
     print("Source {} has latitude {} and longitude {}.".format(source, source.point_list[0], source.point_list[1]))
@@ -415,7 +415,7 @@ def main_method():
     print("Getting point address from latitude and longitude")
 
     print(map_api.get_location_from_point(source.point_list[0], source.point_list[1]).address_str)
-    """
+
     print("---- Getting segments of a transit route  -----")
 
     transitsource = input("Enter the source address: ").strip() or "space needle"
