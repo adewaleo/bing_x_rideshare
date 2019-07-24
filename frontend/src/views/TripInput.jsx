@@ -20,7 +20,7 @@ import React, { Component } from 'react';
 // import classnames from "classnames";
 
 // reactstrap components
-import { FormGroup, Input, Container, Row, Button, Form, Label } from 'reactstrap';
+import { FormGroup, Container, Row, Button, Form, Label } from 'reactstrap';
 import axios from 'axios';
 import { geolocated } from 'react-geolocated';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
@@ -48,21 +48,40 @@ class TripInput extends Component {
     // };
 
     handleSubmit = async () => {
+        const { start, destination, optimiseFor } = this.state;
         try {
-            const response = await axios.post('http://127.0.0.1:5000/recommendations?', {
-                dest: { lat: 11.3, long: -12222.5 },
-                start: { lat: 11.3, long: -12222.5 },
-                optimse_for: 'cost',
+            const startResponse = await axios.get(`http://127.0.0.1:5000/place_autocomplete/'${start}`);
+            const destResponse = await axios.get(`http://127.0.0.1:5000/place_autocomplete/'${destination}`);
+
+            const { lat: startLat, long: startLong } = startResponse.data[0];
+            const { lat: destLat, long: destLong } = destResponse.data[0];
+
+            const response = await axios.post('http://127.0.0.1:5000/recommendations', {
+                dest: { lat: destLat, long: destLong },
+                start: { lat: startLat, long: startLong },
+                optimse_for: optimiseFor,
             });
-            // const response = await axios.get(`http://127.0.0.1:5000/test`);
+
             console.log(response);
         } catch (error) {
             console.error(error);
         }
+
+        // try {
+        //     const response = await axios.post('http://127.0.0.1:5000/recommendations', {
+        //         dest: { lat: 11.3, long: -12222.5 },
+        //         start: { lat: 11.3, long: -12222.5 },
+        //         optimse_for: 'cost',
+        //     });
+        //     // const response = await axios.get(`http://127.0.0.1:5000/test`);
+        //     console.log(response);
+        // } catch (error) {
+        //     console.error(error);
+        // }
     };
 
     render() {
-        const { props } = this;
+        const { props, optimiseFor } = this;
 
         return (
             <>
@@ -76,7 +95,7 @@ class TripInput extends Component {
                             {/* <Input type="text" name="start" id="start" placeholder="Start" /> */}
                             <div>
                                 <GooglePlacesAutocomplete
-                                    onSelect={({ description }) => this.setState({ address: description })}
+                                    onSelect={({ description }) => this.setState({ start: description })}
                                     placeholder="Starting point"
                                 />
                             </div>
@@ -92,7 +111,7 @@ class TripInput extends Component {
                             </div>
                         </FormGroup>
                         <Row className="py-3 align-items-center" style={{ display: 'grid' }}>
-                            <TripInputTabs onToggle={this.handleToggle} optimiseFor={this.state.optimiseFor} />
+                            <TripInputTabs onToggle={this.handleToggle} optimiseFor={optimiseFor} />
                         </Row>
                         <Button color="primary" block onClick={this.handleSubmit}>
                             Submit

@@ -23,11 +23,6 @@ import classnames from 'classnames';
 import { Card, CardBody, NavItem, NavLink, Nav, TabContent, TabPane, Row, Col } from 'reactstrap';
 
 class TripInputTabs extends Component {
-    state = {
-        iconTabs: 1, // 1 - time, 2 - price
-        // plainTabs: 1,
-    };
-
     toggleNavs = (e, optimiseFor) => {
         e.preventDefault();
 
@@ -39,6 +34,8 @@ class TripInputTabs extends Component {
     };
 
     render() {
+        const { optimiseFor } = this.props;
+
         return (
             <Row className="justify-content-center">
                 <Col lg="12">
@@ -49,9 +46,9 @@ class TripInputTabs extends Component {
                         <Nav className="nav-fill flex-column flex-md-row" id="tabs-icons-text" pills role="tablist">
                             <NavItem>
                                 <NavLink
-                                    aria-selected={this.props.optimiseFor === 'time'}
+                                    aria-selected={optimiseFor === 'time'}
                                     className={classnames('mb-sm-3 mb-md-0', {
-                                        active: this.props.optimiseFor === 'time',
+                                        active: optimiseFor === 'time',
                                     })}
                                     onClick={e => this.toggleNavs(e, 'time')}
                                     href="#"
@@ -63,9 +60,9 @@ class TripInputTabs extends Component {
                             </NavItem>
                             <NavItem>
                                 <NavLink
-                                    aria-selected={this.props.optimiseFor === 'price'}
+                                    aria-selected={optimiseFor === 'price'}
                                     className={classnames('mb-sm-3 mb-md-0', {
-                                        active: this.props.optimiseFor === 'price',
+                                        active: optimiseFor === 'price',
                                     })}
                                     onClick={e => this.toggleNavs(e, 'price')}
                                     href="#"
@@ -79,7 +76,7 @@ class TripInputTabs extends Component {
                     </div>
                     <Card className="shadow">
                         <CardBody>
-                            <TabContent activeTab={this.props.optimiseFor}>
+                            <TabContent activeTab={optimiseFor}>
                                 <TabPane tabId="time">
                                     <p className="description">
                                         Choose this option if you want us to optimize for time. This may mean that your
