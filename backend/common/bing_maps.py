@@ -142,6 +142,13 @@ class BingLocation(BingType):
         return results
 
 
+    def address_dict_from_bing_location(self):
+        return {
+            "address": self.address_str,
+            "lat": self.point_list[0],
+            "long": self.point_list[1]
+        }
+
 class BingDepartArrive(BingType):
     def __init__(self, type, time, mt=None, names=None, coords=None):
         self.manType = mt
@@ -155,8 +162,8 @@ class BingDepartArrive(BingType):
 
 
 class BingWalkSegment(BingType):
-    def __init__(self, coords = None, mantype= None, dist= None, duration=None, cost= None):
-        self.coords = coords
+    def __init__(self, start_location = None, mantype= None, dist= None, duration=None, cost= None):
+        self.start_location = start_location
         self.manType = mantype
         self.dist = dist
         self.duration = duration
@@ -164,14 +171,15 @@ class BingWalkSegment(BingType):
 
 
 class BingTransportSegment(BingType):
-    def __init__(self, typeoftransport = None, departdetails = None, arrivedetails = None, mantype= None,text= None, dist= None,duration=None, txt = None, cost = None):
+    def __init__(self, typeoftransport = None, depart_details = None, arrive_details = None, mantype= None, text= None, dist= None, duration=None, txt = None, cost = None):
         self.typeofTransport = typeoftransport
-        self.departDetails = departdetails
-        self.arriveDetails = arrivedetails
+        self.depart_details = depart_details
+        self.arrive_details = arrive_details
         self.dist = dist
         self.duration = duration
         self.manType = mantype
         self.text = txt
+        self.cost = cost
 
 
 class BingDrivingRoute(BingType):
@@ -188,7 +196,7 @@ class BingDrivingRoute(BingType):
         self.dest = dest
         self.distance = distance
         self.travel_duration = travel_duration  # includes traffic time if applicable by API
-        self.time_requested = departure_date_time
+        self.time_requested = departure_date_time or BingDateTime.now()
 
     @staticmethod
     def from_route_and_request_info(route_resource, source_location, dest_location, departure_date_time=None):
@@ -200,8 +208,8 @@ class BingDrivingRoute(BingType):
 class RideShareRoute(BingDrivingRoute):
 
     def __init__(self, *args, **kwargs):
-        self.fare = kwargs["fare"]
-        self.type = kwargs["type"].lower()
+        self.fare = kwargs.pop("fare")
+        self.type = kwargs.pop("type").lower()
 
         is_correct_type_or_err(self.fare, float)
         if self.type not in ["lyft", "uberx"]:
@@ -236,7 +244,7 @@ class RideShareRoute(BingDrivingRoute):
 
 class BingTransitRoute(BingType):
 
-    def __init__(self, segments):
+    def __init__(self, segments, duration):
         is_correct_type_or_err(segments, list)
         for segment in segments:
             # each segment must be a bing walk segment and bing transport segment
@@ -247,6 +255,7 @@ class BingTransitRoute(BingType):
 
         self.segments = segments
         self.fare = float(functools.reduce(lambda sum, segment: sum + segment.cost, segments, 0))
+        self.duration = float(duration)
 
 class BingMaps(object):
     def __init__(self, api_key=None):
@@ -281,7 +290,7 @@ class BingMaps(object):
         locations = self._get_locations_for_query(location_str)
 
         if not locations:
-            raise BingApiError("No locations match the query string")
+            raise BingApiError("No locations match the query string {}".format(location_str))
 
         return BingLocation.from_location_resource(locations[0])
 
@@ -352,23 +361,25 @@ class BingMaps(object):
                     is_walk = 'childItineraryItems' not in segmentItem
 
                 if is_walk:
-                    walkSegment = BingWalkSegment()
-                    walkSegment.coords = segmentItem["maneuverPoint"]["coordinates"]
-                    walkSegment.manType = segmentItem["details"][0]["maneuverType"]
-                    walkSegment.dist = segmentItem["travelDistance"]
-                    walkSegment.duration = segmentItem["travelDuration"]
-                    walkSegment.cost = 0
-                    result.append(walkSegment)
+                    walk_segment = BingWalkSegment()
+                    coords = segmentItem["maneuverPoint"]["coordinates"]
+                    walk_segment.start_location = self.get_location_from_point(coords[0], coords[1])
+                    walk_segment.manType = segmentItem["details"][0]["maneuverType"]
+                    walk_segment.text = segmentItem["instruction"]["text"]
+                    walk_segment.dist = segmentItem["travelDistance"]
+                    walk_segment.duration = BingDuration.from_value_and_unit(segmentItem["travelDuration"], route["durationUnit"])
+                    walk_segment.cost = 0
+                    result.append(walk_segment)
                 else:
-                    transportSegment = BingTransportSegment()
-                    transportSegment.manType = segmentItem["details"][0]["maneuverType"]
-                    transportSegment.dist = segmentItem["travelDistance"]
-                    transportSegment.duration = segmentItem["travelDuration"]
-                    transportSegment.text = segmentItem["instruction"]["text"]
-                    if transportSegment.dist > 10:
-                        transportSegment.cost = 2.75
+                    transport_segment = BingTransportSegment()
+                    transport_segment.manType = segmentItem["details"][0]["maneuverType"]
+                    transport_segment.dist = segmentItem["travelDistance"]
+                    transport_segment.duration = BingDuration.from_value_and_unit(segmentItem["travelDuration"], route["durationUnit"])
+                    transport_segment.text = segmentItem["instruction"]["text"]
+                    if transport_segment.dist > 10:
+                        transport_segment.cost = 2.75
                     else:
-                        transportSegment.cost = 3.75
+                        transport_segment.cost = 3.75
                     depart_itinerary = segmentItem["childItineraryItems"][0]
                     arrive_itinerary = segmentItem["childItineraryItems"][-1]
 
@@ -376,20 +387,22 @@ class BingMaps(object):
                     depart = BingDepartArrive(type="depart", time=depart_time)
                     depart.manType = depart_itinerary["details"][0]["maneuverType"]
                     depart.names = depart_itinerary["instruction"]["text"]
-                    depart.coords = depart_itinerary["maneuverPoint"]["coordinates"]
+                    depart_coords = depart_itinerary["maneuverPoint"]["coordinates"]
+                    depart.coords = self.get_location_from_point(depart_coords[0], depart_coords[1])
 
                     arrive_time = BingDateTime.from_bing_api_time(depart_itinerary["time"])
                     arrive = BingDepartArrive(type="arrive", time=arrive_time)
                     arrive.manType = arrive_itinerary["details"][0]["maneuverType"]
                     arrive.names = arrive_itinerary["instruction"]["text"]
-                    arrive.coords = arrive_itinerary["maneuverPoint"]["coordinates"]
+                    arrive_coords = arrive_itinerary["maneuverPoint"]["coordinates"]
+                    arrive.coords = self.get_location_from_point(arrive_coords[0], arrive_coords[1])
 
-                    transportSegment.departDetails = depart
-                    transportSegment.arriveDetails = arrive
+                    transport_segment.depart_details = depart
+                    transport_segment.arrive_details = arrive
 
-                    result.append(transportSegment)
+                    result.append(transport_segment)
 
-            all_routes.append(BingTransitRoute(result))
+            all_routes.append(BingTransitRoute(result, route["travelDuration"]))
 
         return all_routes
 

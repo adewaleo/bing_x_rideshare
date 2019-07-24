@@ -28,7 +28,6 @@ if __name__ == '__main__':
 
     if not args.test:
         app.run(debug=True)
-
-
-    # run tests here..... feel to comment as needed.
-    main_method()
+    else:
+        # run tests here..... feel to comment as needed.
+        main_method()
