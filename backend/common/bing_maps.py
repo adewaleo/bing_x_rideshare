@@ -279,58 +279,66 @@ class BingMaps(object):
             "dateTime": time,
             "travelMode": "Transit",
             "timeType": "Departure",
+            "maxSolutions": 3,
             "key": self.key
         }
         response_dict = requests.get(url, params).json()
-        segments = response_dict["resourceSets"][0]["resources"][0]["routeLegs"][0]["itineraryItems"]
+        #print(dict_to_pretty_str(response_dict))
 
-        result = []
+        all_routes = []
+        routes = response_dict["resourceSets"][0]["resources"]
 
-        for segmentItem in segments:
-            try:
-                is_walk = segmentItem["iconType"].lower() == "walk"
-            except IndexError:
-                is_walk = 'childItineraryItems' not in segmentItem
+        for route in routes:
+            segments = route["routeLegs"][0]["itineraryItems"]
 
-            if is_walk:
-                walkSegment = BingWalkSegment()
-                walkSegment.coords = segmentItem["maneuverPoint"]["coordinates"]
-                walkSegment.manType = segmentItem["details"][0]["maneuverType"]
-                walkSegment.dist = segmentItem["travelDistance"]
-                walkSegment.duration = segmentItem["travelDuration"]
-                walkSegment.cost = 0
-                result.append(walkSegment)
-            else:
-                transportSegment = BingTransportSegment()
-                transportSegment.manType = segmentItem["details"][0]["maneuverType"]
-                transportSegment.dist = segmentItem["travelDistance"]
-                transportSegment.duration = segmentItem["travelDuration"]
-                transportSegment.text = segmentItem["instruction"]["text"]
-                if transportSegment.dist > 10:
-                    transportSegment.cost = 2.75
+            result = []
+            for segmentItem in segments:
+                try:
+                    is_walk = segmentItem["iconType"].lower() == "walk"
+                except IndexError:
+                    is_walk = 'childItineraryItems' not in segmentItem
+
+                if is_walk:
+                    walkSegment = BingWalkSegment()
+                    walkSegment.coords = segmentItem["maneuverPoint"]["coordinates"]
+                    walkSegment.manType = segmentItem["details"][0]["maneuverType"]
+                    walkSegment.dist = segmentItem["travelDistance"]
+                    walkSegment.duration = segmentItem["travelDuration"]
+                    walkSegment.cost = 0
+                    result.append(walkSegment)
                 else:
-                    transportSegment.cost = 3.75
-                depart_itinerary = segmentItem["childItineraryItems"][0]
-                arrive_itinerary = segmentItem["childItineraryItems"][-1]
+                    transportSegment = BingTransportSegment()
+                    transportSegment.manType = segmentItem["details"][0]["maneuverType"]
+                    transportSegment.dist = segmentItem["travelDistance"]
+                    transportSegment.duration = segmentItem["travelDuration"]
+                    transportSegment.text = segmentItem["instruction"]["text"]
+                    if transportSegment.dist > 10:
+                        transportSegment.cost = 2.75
+                    else:
+                        transportSegment.cost = 3.75
+                    depart_itinerary = segmentItem["childItineraryItems"][0]
+                    arrive_itinerary = segmentItem["childItineraryItems"][-1]
 
-                depart_time = BingDateTime.from_bing_api_time(depart_itinerary["time"])
-                depart = BingDepartArrive(type="depart", time=depart_time)
-                depart.manType = depart_itinerary["details"][0]["maneuverType"]
-                depart.names = depart_itinerary["instruction"]["text"]
-                depart.coords = depart_itinerary["maneuverPoint"]["coordinates"]
+                    depart_time = BingDateTime.from_bing_api_time(depart_itinerary["time"])
+                    depart = BingDepartArrive(type="depart", time=depart_time)
+                    depart.manType = depart_itinerary["details"][0]["maneuverType"]
+                    depart.names = depart_itinerary["instruction"]["text"]
+                    depart.coords = depart_itinerary["maneuverPoint"]["coordinates"]
 
-                arrive_time = BingDateTime.from_bing_api_time(depart_itinerary["time"])
-                arrive = BingDepartArrive(type="arrive", time=arrive_time)
-                arrive.manType = arrive_itinerary["details"][0]["maneuverType"]
-                arrive.names = arrive_itinerary["instruction"]["text"]
-                arrive.coords = arrive_itinerary["maneuverPoint"]["coordinates"]
+                    arrive_time = BingDateTime.from_bing_api_time(depart_itinerary["time"])
+                    arrive = BingDepartArrive(type="arrive", time=arrive_time)
+                    arrive.manType = arrive_itinerary["details"][0]["maneuverType"]
+                    arrive.names = arrive_itinerary["instruction"]["text"]
+                    arrive.coords = arrive_itinerary["maneuverPoint"]["coordinates"]
 
-                transportSegment.departDetails = depart
-                transportSegment.arriveDetails = arrive
+                    transportSegment.departDetails = depart
+                    transportSegment.arriveDetails = arrive
 
-                result.append(transportSegment)
+                    result.append(transportSegment)
 
-        return result
+            all_routes.append(result)
+
+        return all_routes
 
     def get_possible_locations_from_string(self, location_str):
         """
@@ -424,7 +432,7 @@ def main_method():
     transitsource = map_api.get_location_from_string(transitsource)
     transitdestination = map_api.get_location_from_string(transitdestination)
 
-    segments = map_api.get_segments(transitsource, transitdestination)
+    list_of_segments_of_all_routes = map_api.get_segments(transitsource, transitdestination)
 
     print("******* Segments in the Route *******")
-    print(segments)
+    print(list_of_segments_of_all_routes)
