@@ -17,12 +17,9 @@
 */
 /*eslint-disable*/
 import React from "react";
-import { Link } from "react-router-dom";
 // reactstrap components
 import {
   Button,
-  Card,
-  CardImg,
   NavItem,
   NavLink,
   Nav,
@@ -37,31 +34,6 @@ class CardsFooter extends React.Component {
     return (
       <>
         <footer className="footer">
-        {/* <footer className="footer has-cards"> */}
-          {/* <Container className="container-lg">
-            <Row>
-              <Col className="mb-5 mb-md-0" md="6">
-                <Card className="card-lift--hover shadow border-0">
-                  <Link to="/landing-page">
-                    <CardImg
-                      alt="..."
-                      src={require("assets/img/theme/landing.jpg")}
-                    />
-                  </Link>
-                </Card>
-              </Col>
-              <Col className="mb-5 mb-lg-0" md="6">
-                <Card className="card-lift--hover shadow border-0">
-                  <Link to="/profile-page">
-                    <CardImg
-                      alt="..."
-                      src={require("assets/img/theme/profile.jpg")}
-                    />
-                  </Link>
-                </Card>
-              </Col>
-            </Row>
-          </Container> */}
           <Container>
             <Row className="row-grid align-items-center my-md">
               <Col lg="6">
@@ -72,7 +44,7 @@ class CardsFooter extends React.Component {
                   Thank you for voting for us!
                 </h4>
               </Col>
-              <Col className="text-lg-center btn-wrapper" lg="6">
+              <Col className="text-lg-right btn-wrapper" lg="6">
                 <Button
                   className="btn-neutral btn-icon-only btn-round"
                   color="twitter"
@@ -86,32 +58,6 @@ class CardsFooter extends React.Component {
                 <UncontrolledTooltip delay={0} target="tooltip475038074">
                   Tweet us
                 </UncontrolledTooltip>
-                {/* <Button
-                  className="btn-neutral btn-icon-only btn-round ml-1"
-                  color="facebook"
-                  href="https://www.facebook.com/creativetim"
-                  id="tooltip837440414"
-                  size="lg"
-                  target="_blank"
-                >
-                  <i className="fa fa-facebook-square" />
-                </Button>
-                <UncontrolledTooltip delay={0} target="tooltip837440414">
-                  Like us
-                </UncontrolledTooltip> */}
-                {/* <Button
-                  className="btn-neutral btn-icon-only btn-round ml-1"
-                  color="dribbble"
-                  href="https://dribbble.com/creativetim"
-                  id="tooltip829810202"
-                  size="lg"
-                  target="_blank"
-                >
-                  <i className="fa fa-dribbble" />
-                </Button>
-                <UncontrolledTooltip delay={0} target="tooltip829810202">
-                  Follow us
-                </UncontrolledTooltip> */}
                 <Button
                   className="btn-neutral btn-icon-only btn-round ml-1"
                   color="github"
@@ -142,14 +88,6 @@ class CardsFooter extends React.Component {
               </Col>
               <Col md="6">
                 <Nav className="nav-footer justify-content-end">
-                  {/* <NavItem>
-                    <NavLink
-                      href="https://www.creative-tim.com?ref=adsr-footer"
-                      target="_blank"
-                    >
-                      Creative Tim
-                    </NavLink>
-                  </NavItem> */}
                   <NavItem>
                     <NavLink
                       href="about"
@@ -157,22 +95,6 @@ class CardsFooter extends React.Component {
                       About
                     </NavLink>
                   </NavItem>
-                  {/* <NavItem>
-                    <NavLink
-                      href="http://blog.creative-tim.com?ref=adsr-footer"
-                      target="_blank"
-                    >
-                      Blog
-                    </NavLink>
-                  </NavItem> */}
-                  {/* <NavItem>
-                    <NavLink
-                      href="https://github.com/creativetimofficial/argon-design-system-react/blob/master/LICENSE.md"
-                      target="_blank"
-                    >
-                      MIT License
-                    </NavLink>
-                  </NavItem> */}
                 </Nav>
               </Col>
             </Row>
