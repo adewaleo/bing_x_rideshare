@@ -4,6 +4,7 @@ from flask import request
 from common.util import handle_error
 import json
 
+
 class PlaceAutocomplete(Resource):
     def get(self, query):
         address_list = []
@@ -36,7 +37,8 @@ class PointToAddress(Resource):
         bing_map = BingMaps()
 
         try:
-            location = bing_map.get_location_from_point(lat.strip(), long.strip())
+            location = bing_map.get_location_from_point(
+                lat.strip(), long.strip())
         except BingApiError as e:
             handle_error(ex=e)
 
@@ -47,19 +49,15 @@ class PointToAddress(Resource):
 
         return address_dict, 200
 
-    
+
 class Recommendations(Resource):
 
     def post(self):
-        start = json.loads(request.args.get("start"))
-        dest = json.loads(request.args.get("dest"))
-        start_lat = start["lat"]
-        start_long = start["long"]
-        dest_lat = dest["lat"]
-        dest_long = dest["long"]
-        optimisation_factor = request.args.get("optimise_for")
-        
-        
+        _request_body = request.json
+        start = _request_body["start"]
+        dest = _request_body["dest"]
+        optimisation_factor = _request_body["optimise_for"]
+
         """
         Dummy dictionary of the object [Route, Route....] 
         with one Route option.
@@ -85,8 +83,5 @@ class Recommendations(Resource):
         route_dict["duration"] = 600
         route_dict["cost"] = 6.5
         routes_list.append(route_dict)
-        
-        
+
         return routes_list, 201
-
-
