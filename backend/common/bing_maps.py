@@ -175,8 +175,7 @@ class BingDrivingRoute(BingType):
 
 class BingMaps(object):
     def __init__(self, api_key=None):
-        #self.key = api_key or _get_api_key_from_file()
-        self.key = "Atzbu4SACj4zZ1icFb5Ho_bRDZeD2V6khrvLpS85zu7osfMUIB9o_eprPmpfX8Kq"
+        self.key = api_key or _get_api_key_from_file()
 
     def _get_locations_for_query(self, location_str):
         url = "http://dev.virtualearth.net/REST/v1/Locations"
@@ -230,7 +229,7 @@ class BingMaps(object):
         location = response_dict["resourceSets"][0]["resources"][0]
         return BingLocation.from_location_resource(location)
 
-    def get_walk_segments(self, source, destination):
+    def get_segments(self, source, destination):
         url = "http://dev.virtualearth.net/REST/v1/Routes/Transit"
         params = {
             "wayPoint.1": source,
@@ -368,7 +367,7 @@ def main_method():
     transitsource = map_api.get_location_from_string(transitsource)
     transitdestination = map_api.get_location_from_string(transitdestination)
 
-    walkSegments, transportSegments = map_api.get_walk_segments(transitsource, transitdestination)
+    walkSegments, transportSegments = map_api.get_segments(transitsource, transitdestination)
     print("******* Walk Segments in the Route *******")
     print(walkSegments)
     print("******* Transport Segments in the Route *******")
