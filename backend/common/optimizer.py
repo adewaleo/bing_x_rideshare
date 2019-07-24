@@ -27,8 +27,8 @@ class RouteOptimizer(object):
         self.lyft_route = routes["lyft"]
 
         self.all_transit_route = BingTransitRoute(self.bing_maps
-                                                  .get_segments(self.origin_source.address_str,
-                                                                self.final_dest.address_str))
+                                                  .get_transit_routes(self.origin_source.address_str,
+                                                                      self.final_dest.address_str))
 
 
 

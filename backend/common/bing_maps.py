@@ -227,9 +227,9 @@ class RideShareRoute(BingDrivingRoute):
         uber_fare = UberEstimate.estimate_fare(distance.value, duration.total_seconds())
 
         uber_route = RideShareRoute(source, dest, distance,
-                                         duration, depart_time, fare=lyft_fare, type="uberx")
-        lyft_route = RideShareRoute(source, dest, distance,
                                          duration, depart_time, fare=uber_fare, type="uberx")
+        lyft_route = RideShareRoute(source, dest, distance,
+                                         duration, depart_time, fare=lyft_fare, type="lyft")
 
         return dict(uber=uber_route, lyft=lyft_route)
 
@@ -242,11 +242,11 @@ class BingTransitRoute(BingType):
             # each segment must be a bing walk segment and bing transport segment
             try:
                 is_correct_type_or_err(segment, BingWalkSegment)
-            except ValueError:
+            except TypeError:
                 is_correct_type_or_err(segment, BingTransportSegment)
 
         self.segments = segments
-        self.fare = functools.reduce(lambda sum, segment: sum + segment.cost, segments, 0)
+        self.fare = float(functools.reduce(lambda sum, segment: sum + segment.cost, segments, 0))
 
 class BingMaps(object):
     def __init__(self, api_key=None):
@@ -320,7 +320,7 @@ class BingMaps(object):
         return BingLocation.from_location_resource(location)
 
 
-    def get_segments(self, source, destination, time=None):
+    def get_transit_routes(self, source, destination, time=None):
 
         time = time or BingDateTime.now().date_time_str
 
@@ -389,7 +389,7 @@ class BingMaps(object):
 
                     result.append(transportSegment)
 
-            all_routes.append(result)
+            all_routes.append(BingTransitRoute(result))
 
         return all_routes
 
@@ -485,7 +485,8 @@ def main_method():
     transitsource = map_api.get_location_from_string(transitsource)
     transitdestination = map_api.get_location_from_string(transitdestination)
 
-    list_of_segments_of_all_routes = map_api.get_segments(transitsource, transitdestination)
+    list_of_segments_of_all_routes = map_api.get_transit_routes(transitsource, transitdestination)
 
     print("******* Segments in the Route *******")
     print(list_of_segments_of_all_routes)
+    print("costs: " + str([item.fare for item in list_of_segments_of_all_routes]))
