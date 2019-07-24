@@ -45,6 +45,23 @@ class BingDateTime(BingType):
         time_now = datetime.datetime.now()
         return BingDateTime(time_now)
 
+    @staticmethod
+    def from_bing_api_time(time):
+        time = time.lstrip("/Date(").rstrip(")/")
+
+        if "-" in time:
+            seconds_from_epoch, offset = time.split("-")
+        elif "+" in time:
+            seconds_from_epoch, offset = time.split("+")
+        else:
+            seconds_from_epoch = time[:-4]
+            offset = time[-4:]
+
+        seconds_from_epoch = float(seconds_from_epoch) / 1000
+        offset = float(offset)
+
+        return BingDateTime(datetime.datetime.fromtimestamp(seconds_from_epoch))
+
 
 class BingDistance(BingType):
     def __init__(self, value, unit):
@@ -124,10 +141,15 @@ class BingLocation(BingType):
 
 
 class BingDepartArrive(BingType):
-    def __init__(self, mt=None, names=None, coords=None):
-        self.manType=mt
+    def __init__(self, type, time, mt=None, names=None, coords=None):
+        self.manType = mt
+        self.time = time
         self.names = names
         self.coords = coords
+        self.type = type.lower()
+
+        if type not in ["depart", "arrive"]:
+            raise BingApiError("Type must be 'depart' or 'arrive'")
 
 
 class BingWalkSegment(BingType):
@@ -246,48 +268,67 @@ class BingMaps(object):
         return BingLocation.from_location_resource(location)
 
 
-    def get_segments(self, source, destination):
+    def get_segments(self, source, destination, time=None):
+
+        time = time or BingDateTime.now().date_time_str
+
         url = "http://dev.virtualearth.net/REST/v1/Routes/Transit"
         params = {
             "wayPoint.1": source,
             "wayPoint.2": destination,
             "distanceUnit": "Mile",
-            "dateTime": "07/24/2019 05:42:00",
+            "dateTime": time,
             "travelMode": "Transit",
             "timeType": "Departure",
-            "key": BING_API_KEY
+            "key": self.key
         }
         response_dict = requests.get(url, params).json()
-        walkSegmentResults = []
-        transportSegmentResults = []
         segments = response_dict["resourceSets"][0]["resources"][0]["routeLegs"][0]["itineraryItems"]
 
+        result = []
+
         for segmentItem in segments:
-            if 'childItineraryItems' not in segmentItem:
+            try:
+                is_walk = segmentItem["iconType"].lower() == "walk"
+            except IndexError:
+                is_walk = 'childItineraryItems' not in segmentItem
+
+            if is_walk:
                 walkSegment = BingWalkSegment()
                 walkSegment.coords = segmentItem["maneuverPoint"]["coordinates"]
                 walkSegment.manType = segmentItem["details"][0]["maneuverType"]
                 walkSegment.dist = segmentItem["travelDistance"]
                 walkSegment.duration = segmentItem["travelDuration"]
-                walkSegmentResults.append(walkSegment)
+
+                result.append(walkSegment)
             else:
                 transportSegment = BingTransportSegment()
                 transportSegment.manType = segmentItem["details"][0]["maneuverType"]
                 transportSegment.dist = segmentItem["travelDistance"]
                 transportSegment.duration = segmentItem["travelDuration"]
                 transportSegment.text = segmentItem["instruction"]["text"]
-                depart = BingDepartArrive()
-                depart.manType = segmentItem["childItineraryItems"][0]["details"][0]["maneuverType"]
-                depart.names = segmentItem["childItineraryItems"][0]["instruction"]["text"]
-                depart.coords = segmentItem["childItineraryItems"][0]["maneuverPoint"]["coordinates"]
-                arrive = BingDepartArrive()
-                arrive.manType = segmentItem["childItineraryItems"][1]["details"][0]["maneuverType"]
-                arrive.names = segmentItem["childItineraryItems"][1]["instruction"]["text"]
-                arrive.coords = segmentItem["childItineraryItems"][1]["maneuverPoint"]["coordinates"]
+
+                depart_itinerary = segmentItem["childItineraryItems"][0]
+                arrive_itinerary = segmentItem["childItineraryItems"][-1]
+
+                depart_time = BingDateTime.from_bing_api_time(depart_itinerary["time"])
+                depart = BingDepartArrive(type="depart", time=depart_time)
+                depart.manType = depart_itinerary["details"][0]["maneuverType"]
+                depart.names = depart_itinerary["instruction"]["text"]
+                depart.coords = depart_itinerary["maneuverPoint"]["coordinates"]
+
+                arrive_time = BingDateTime.from_bing_api_time(depart_itinerary["time"])
+                arrive = BingDepartArrive(type="arrive", time=arrive_time)
+                arrive.manType = arrive_itinerary["details"][0]["maneuverType"]
+                arrive.names = arrive_itinerary["instruction"]["text"]
+                arrive.coords = arrive_itinerary["maneuverPoint"]["coordinates"]
+
                 transportSegment.departDetails = depart
                 transportSegment.arriveDetails = arrive
-                transportSegmentResults.append(transportSegment)
-        return walkSegmentResults, transportSegmentResults
+
+                result.append(transportSegment)
+
+        return result
 
     def get_possible_locations_from_string(self, location_str):
         """
@@ -356,11 +397,11 @@ def main_method():
 
     map_api = BingMaps()
 
-    query = input("Enter the query string: ").strip()
+    query = input("Enter the query string: ").strip() or "space needle"
     print([(tup[0].address_str, tup[1]) for tup in map_api.get_possible_locations_from_string(query)])
 
-    source = input("Enter the source address: ").strip()
-    destination = input("Enter the destination address: ").strip()
+    source = input("Enter the source address: ").strip() or "space needle"
+    destination = input("Enter the destination address: ").strip() or "microsoft building 18"
 
     source = map_api.get_location_from_string(source)
     destination = map_api.get_location_from_string(destination)
@@ -375,14 +416,12 @@ def main_method():
 
     print("---- Getting segments of a transit route  -----")
 
-    transitsource = input("Enter the source address: ").strip()
-    transitdestination = input("Enter the destination address: ").strip()
+    transitsource = input("Enter the source address: ").strip() or "space needle"
+    transitdestination = input("Enter the destination address: ").strip() or "microsoft building 18"
 
     transitsource = map_api.get_location_from_string(transitsource)
     transitdestination = map_api.get_location_from_string(transitdestination)
 
-    walkSegments, transportSegments = map_api.get_segments(transitsource, transitdestination)
-    print("******* Walk Segments in the Route *******")
-    print(walkSegments)
-    print("******* Transport Segments in the Route *******")
-    print(transportSegments)
+    segments = map_api.get_segments(transitsource, transitdestination)
+    print("******* Segments in the Route *******")
+    print(segments)
