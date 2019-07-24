@@ -23,7 +23,8 @@ import { Row, Col } from "reactstrap";
 class RecommendationsListView extends React.Component {
   constructor(props) {
     super(props);
-    this.route = {id: "1234", segments: [{mode: "transit"}]};
+    this.route1 = {id: "1234", segments: [{mode: "transit"}]};
+    this.route2 = {id: "1234", segments: [{mode: "transit"}]};
   }
 
   render() {
@@ -31,9 +32,9 @@ class RecommendationsListView extends React.Component {
       <>
       <Row className="py-md align-items-center">
         <Col lg="12">
-          <RecommendationsListViewItem route={this.route} />
-          <RecommendationsListViewItem route={this.route} />
-          <RecommendationsListViewItem route={this.route} />
+          <RecommendationsListViewItem route={this.route1} />
+          <RecommendationsListViewItem route={this.route2} />
+          {/* <RecommendationsListViewItem route={this.route} /> */}
         </Col>
       </Row>
       </>

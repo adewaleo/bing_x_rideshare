@@ -86,7 +86,7 @@ class TripInput extends Component {
 
         return (
             <>
-                <Container>
+                <Container style={{marginBottom: "4rem"}}>
                     <Row className="py-3 align-items-center">
                         <h3 className="heading-title mb-0">Enter your trip</h3>
                     </Row>
@@ -114,10 +114,10 @@ class TripInput extends Component {
                         <Row className="py-3 align-items-center" style={{ display: 'grid' }}>
                             <TripInputTabs onToggle={this.handleToggle} optimiseFor={optimiseFor} />
                         </Row>
-                        <Button color="primary" block onClick={this.handleSubmit}>
+                        <Button color="primary" block href="/recommendations">
                             Submit
                         </Button>
-                        {this.state.recommendations && JSON.stringify(this.state.recommendations[0])}
+                        {/* {this.state.recommendations && JSON.stringify(this.state.recommendations[0])} */}
                     </Form>
                     {/* <Row className="py-3 align-items-center">
                                                 <FormGroup>
