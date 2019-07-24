@@ -158,7 +158,6 @@ class BingWalkSegment(BingType):
         self.manType = mantype
         self.dist = dist
         self.duration = duration
-        self.cost = 0
 
 
 class BingTransportSegment(BingType):
@@ -299,7 +298,7 @@ class BingMaps(object):
                 walkSegment.manType = segmentItem["details"][0]["maneuverType"]
                 walkSegment.dist = segmentItem["travelDistance"]
                 walkSegment.duration = segmentItem["travelDuration"]
-
+                walkSegment.cost = 0
                 result.append(walkSegment)
             else:
                 transportSegment = BingTransportSegment()
@@ -307,7 +306,10 @@ class BingMaps(object):
                 transportSegment.dist = segmentItem["travelDistance"]
                 transportSegment.duration = segmentItem["travelDuration"]
                 transportSegment.text = segmentItem["instruction"]["text"]
-
+                if transportSegment.dist > 10:
+                    transportSegment.cost = 2.75
+                else:
+                    transportSegment.cost = 3.75
                 depart_itinerary = segmentItem["childItineraryItems"][0]
                 arrive_itinerary = segmentItem["childItineraryItems"][-1]
 
@@ -405,7 +407,7 @@ def main_method():
 
     source = map_api.get_location_from_string(source)
     destination = map_api.get_location_from_string(destination)
-
+    
     print(str(map_api.get_driving_route(source, destination)))
 
     print("Source {} has latitude {} and longitude {}.".format(source, source.point_list[0], source.point_list[1]))
@@ -423,5 +425,6 @@ def main_method():
     transitdestination = map_api.get_location_from_string(transitdestination)
 
     segments = map_api.get_segments(transitsource, transitdestination)
+
     print("******* Segments in the Route *******")
     print(segments)
