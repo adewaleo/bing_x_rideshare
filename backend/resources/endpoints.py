@@ -53,14 +53,10 @@ class PointToAddress(Resource):
 class Recommendations(Resource):
 
     def post(self):
-        requestData = json.loads(request.data)
-        start = requestData["start"]
-        dest = requestData["dest"]
-        start_lat = start["lat"]
-        start_long = start["long"]
-        dest_lat = dest["lat"]
-        dest_long = dest["long"]
-        optimisation_factor = requestData["optimse_for"]
+        _request_body = request.json
+        start = _request_body["start"]
+        dest = _request_body["dest"]
+        optimisation_factor = _request_body["optimise_for"]
 
         """
         Dummy dictionary of the object [Route, Route....] 

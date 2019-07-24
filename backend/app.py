@@ -21,7 +21,7 @@ api.add_resource(Recommendations, '/recommendations')
 
 if __name__ == '__main__':
     # python backend/app.py --help
-    parser = ArgumentParser(description="Run the server or run tests by adding `--tests`")
+    parser = ArgumentParser(description="Run the server or run tests by adding `--test`")
     parser.add_argument('--test', action='store_true', help="If flag is supplied, run tests instead of server")
 
     args = parser.parse_args()
