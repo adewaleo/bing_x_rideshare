@@ -22,6 +22,8 @@ import {
   Modal,
 } from "reactstrap";
 
+import RouteDetailsSegment from "./RouteDetailsSegment.jsx";
+
 class RouteDetailsModal extends React.Component {
   render() {
     return (
@@ -57,9 +59,10 @@ class RouteDetailsModal extends React.Component {
               <span className="lead text-muted">10 minutes</span>
               <p className="lead">$3.14</p>
             </div>
-            <p>
-              Take a bus, car, etc.
-            </p>
+            <hr />
+            <h6>Trip details</h6>
+            <RouteDetailsSegment />
+            <RouteDetailsSegment />
           </div>
           <div className="modal-footer">
             <Button
