@@ -24,7 +24,7 @@ import { FormGroup,
   Input,
   Container,
   Row,
-  // Col
+  Button
 } from "reactstrap";
 
   import TripInputTabs from "./TripInputTabs.jsx";
@@ -63,6 +63,14 @@ class TripInput extends React.Component {
             <Row className="py-3 align-items-center">
               <TripInputTabs />
             </Row>
+            <Button
+              className="ml-1 btn-neutral btn-icon-only btn-round"
+              color="success"
+              href="/recommendations"
+              size="lg"
+            >
+              Go
+            </Button>
           </Container>
       </>
     );
