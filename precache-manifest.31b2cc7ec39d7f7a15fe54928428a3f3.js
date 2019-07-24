@@ -1,31 +1,35 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6974f6b51a0c2d54bb7c12388a9e1ff7",
+    "revision": "153acc58668722830d0ec7525999ab12",
     "url": "/index.html"
   },
   {
-    "revision": "c65a700db680479bdae8",
+    "revision": "d29c1710da2cf1e773a0",
+    "url": "/static/css/2.fa0c4f0f.chunk.css"
+  },
+  {
+    "revision": "de8a4273327c50949dc7",
     "url": "/static/css/main.8f4770e2.chunk.css"
   },
   {
-    "revision": "10bf8d0bcf3318e6bde6",
-    "url": "/static/js/2.28155a5b.chunk.js"
+    "revision": "d29c1710da2cf1e773a0",
+    "url": "/static/js/2.a057ae88.chunk.js"
   },
   {
-    "revision": "c65a700db680479bdae8",
-    "url": "/static/js/main.15e4afe6.chunk.js"
+    "revision": "de8a4273327c50949dc7",
+    "url": "/static/js/main.3bbf3f44.chunk.js"
   },
   {
     "revision": "42ac5946195a7306e2a5",
     "url": "/static/js/runtime~main.a8a9905a.js"
   },
   {
-    "revision": "275a2629582aa2af3469364c6748cf38",
-    "url": "/static/media/argon-react-white.275a2629.png"
+    "revision": "c1fc32d8ffd0e3e12bf8bcf52457dd62",
+    "url": "/static/media/argon-react-white.c1fc32d8.png"
   },
   {
-    "revision": "f38ddea9dedadea03c5d43c596dac13f",
-    "url": "/static/media/argon-react.f38ddea9.png"
+    "revision": "4e12a15a193457d725e5da4f60dac6b8",
+    "url": "/static/media/argon-react.4e12a15a.png"
   },
   {
     "revision": "674f50d287a8c48dc19ba404d20fe713",
