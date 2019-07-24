@@ -32,6 +32,7 @@ class TripInput extends Component {
         start: null,
         destination: null,
         optimiseFor: 'time',
+        recommendations: [],
     };
 
     handleToggle = optimiseFor => {
@@ -62,7 +63,7 @@ class TripInput extends Component {
                 optimse_for: optimiseFor,
             });
 
-            console.log(response);
+            this.setState({ recommendations: response.data });
         } catch (error) {
             console.error(error);
         }
@@ -116,6 +117,7 @@ class TripInput extends Component {
                         <Button color="primary" block onClick={this.handleSubmit}>
                             Submit
                         </Button>
+                        {this.state.recommendations && JSON.stringify(this.state.recommendations[0])}
                     </Form>
                     {/* <Row className="py-3 align-items-center">
                                                 <FormGroup>
