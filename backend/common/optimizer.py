@@ -19,16 +19,18 @@ class RouteOptimizer(object):
         self.bing_maps = BingMaps()
         self.depart_time = depart_time
 
+        self.uber_route = None
+        self.lyft_route = None
+        self._init_routes()
+
 
     def _init_routes(self):
-
         routes = RideShareRoute.from_source_dest(self.origin_source, self.final_dest, self.depart_time)
         self.uber_route = routes["uber"]
         self.lyft_route = routes["lyft"]
 
-        self.all_transit_route = BingTransitRoute(self.bing_maps
-                                                  .get_transit_routes(self.origin_source.address_str,
-                                                                      self.final_dest.address_str))
+        transit_routes = self.bing_maps.get_transit_routes(self.origin_source.address_str, self.final_dest.address_str)
+        self.basic_transit_routes = transit_routes
 
 
 
