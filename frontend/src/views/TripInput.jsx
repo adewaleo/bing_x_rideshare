@@ -81,7 +81,7 @@ class TripInput extends Component {
     };
 
     render() {
-        const { props, optimiseFor } = this;
+        const { optimiseFor } = this.state;
 
         return (
             <>
