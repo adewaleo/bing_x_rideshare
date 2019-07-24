@@ -4,6 +4,7 @@
 # RouteData: https://docs.microsoft.com/en-us/bingmaps/rest-services/routes/route-data.
 
 import os
+import sys
 import datetime
 import requests
 from yaml import safe_load
@@ -157,7 +158,13 @@ class BingMaps(object):
             "key": self.key
         }
         response_dict = requests.get(url, params).json()
-        locations = response_dict["resourceSets"][0]["resources"]
+        try:
+            locations = response_dict["resourceSets"][0]["resources"]
+        except IndexError:
+            error = response_dict.get("errorDetails",
+                                      "No location found for query '{}'."
+                                      .format(location_str))
+            raise BingApiError(error)
         return locations
 
     def get_location_from_string(self, location_str):
@@ -199,7 +206,16 @@ class BingMaps(object):
             "key": self.key
         }
         response_dict = requests.get(url, params).json()
-        location = response_dict["resourceSets"][0]["resources"][0]
+
+        # print(response_dict, sys.stderr)
+
+        try:
+            location = response_dict["resourceSets"][0]["resources"][0]
+        except IndexError:
+            error = response_dict.get("errorDetails",
+                                      "No location found for lat '{}' and long '{}'."
+                                      .format(latitude, longitude))
+            raise BingApiError(error)
         return BingLocation.from_location_resource(location)
 
     def get_possible_locations_from_string(self, location_str):
@@ -263,8 +279,6 @@ class BingMaps(object):
         return BingDrivingRoute.from_route_and_request_info(route, source_location=source_location,
                                                             dest_location=dest_location,
                                                             departure_date_time=departure_date_time)
-
-
 
 def main_method():
     # run python common/bing_maps.py

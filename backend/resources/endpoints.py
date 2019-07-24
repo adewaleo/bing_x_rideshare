@@ -1,13 +1,19 @@
-from flask_restful import Resource, reqparse
-from common.bing_maps import BingLocation, BingMaps
+from flask_restful import Resource, abort
+from common.bing_maps import BingLocation, BingMaps, BingApiError
 from flask import request
+from common.util import handle_error
 import json
 
 class PlaceAutocomplete(Resource):
     def get(self, query):
         address_list = []
         bing_map = BingMaps()
-        address_list = bing_map.get_possible_locations_from_string(query)
+
+        try:
+            address_list = bing_map.get_possible_locations_from_string(query)
+        except BingApiError as e:
+            handle_error(ex=e)
+
         address_dict_list = []
         for address in address_list:
             location = address[0]
@@ -16,15 +22,33 @@ class PlaceAutocomplete(Resource):
             address_dict['lat'] = location.point_list[0]
             address_dict['long'] = location.point_list[1]
             address_dict_list.append(address_dict)
-        return address_dict_list, 201
+        return address_dict_list, 200
 
-    def post(self):
-        return "", 201
-    
+
+class PointToAddress(Resource):
+    def get(self, query):
+        try:
+            lat, long = query.split(",")
+        except ValueError:
+            msg = "Wrong lat,long format. Please supply latitude and longitude in the following format: 'lat,long'"
+            handle_error(message=msg)
+
+        bing_map = BingMaps()
+
+        try:
+            location = bing_map.get_location_from_point(lat.strip(), long.strip())
+        except BingApiError as e:
+            handle_error(ex=e)
+
+        address_dict = dict()
+        address_dict['address'] = location.address_str
+        address_dict['lat'] = location.point_list[0]
+        address_dict['long'] = location.point_list[1]
+
+        return address_dict, 200
+
     
 class Recommendations(Resource):
-    def get(self, query):
-        return "", 201
 
     def post(self):
         start = json.loads(request.args.get("start"))
