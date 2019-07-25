@@ -1,5 +1,6 @@
 
-from common.bing_maps import BingLocation, BingDateTime, BingMaps, RideShareRoute, BingTransitRoute
+from common.bing_maps import (BingMaps, BingLocation, BingDateTime, RideShareRoute, BingTransitRoute,
+                              BingTransportSegment, BingComplexRoute)
 from common.util import dict_to_pretty_str, is_correct_type_or_err
 
 
@@ -34,6 +35,22 @@ class RouteOptimizer(object):
 
 
     def get_simple_hybrid(self, transit_route):
+        if len(transit_route.segments) <= 1:
+            return []
 
+        possible_complex_routes = []
+        while len(transit_route.segments) > 1:
+            # get last segment, this is the start of the rideshare.
+            last_segment = transit_route.segments[-1]
 
-        pass
+            transit_route = transit_route.get_route_without_last_segment()
+
+            # if there is another transport segment beforehand
+            if isinstance(last_segment, BingTransportSegment):
+                rs_source = last_segment.depart_details.coords
+                rs_depart_time = last_segment.depart_details.time
+                ride_share_route = RideShareRoute.from_source_dest(rs_source, self.final_dest, rs_depart_time)
+
+                # possible_complex_routes.append(BingComplexRoute([transit_route, ride_share_route["lyft"]]))
+                possible_complex_routes.append(BingComplexRoute([transit_route, ride_share_route["uber"]]))
+        return possible_complex_routes
