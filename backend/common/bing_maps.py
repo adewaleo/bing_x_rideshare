@@ -255,8 +255,22 @@ class BingTransitRoute(BingType):
                 is_correct_type_or_err(segment, BingTransportSegment)
 
         self.segments = segments
-        self.fare = float(functools.reduce(lambda sum, segment: sum + segment.cost, segments, 0))
         self.duration = float(duration)
+        self.fare = 0
+
+        agency_cost = {}
+
+        for segment in segments:
+            agency_name = segment.agency
+
+            if agency_name in agency_cost:
+                # don't add cost for transfers
+                pass
+            else:
+                agency_cost[agency_name] = segment.cost
+
+        for _, price in agency_cost.items():
+            self.fare = self.fare + price
 
 class BingMaps(object):
     def __init__(self, api_key=None):
@@ -342,7 +356,7 @@ class BingMaps(object):
             "dateTime": time,
             "travelMode": "Transit",
             "timeType": "Departure",
-            "maxSolutions": 3,
+            "maxSolutions": 2,
             "key": self.key
         }
         response_dict = requests.get(url, params).json()
@@ -370,6 +384,7 @@ class BingMaps(object):
                     walk_segment.dist = segmentItem["travelDistance"]
                     walk_segment.duration = BingDuration.from_value_and_unit(segmentItem["travelDuration"], route["durationUnit"])
                     walk_segment.cost = 0
+                    walk_segment.agency = "walk"
                     result.append(walk_segment)
                 else:
                     transport_segment = BingTransportSegment()
@@ -377,6 +392,9 @@ class BingMaps(object):
                     transport_segment.dist = segmentItem["travelDistance"]
                     transport_segment.duration = BingDuration.from_value_and_unit(route["travelDuration"], route["durationUnit"])
                     transport_segment.text = segmentItem["instruction"]["text"]
+
+                    transport_segment.agency = segmentItem["transitLine"]["agencyName"]
+
                     if transport_segment.dist > 10:
                         transport_segment.cost = 2.75
                     else:
