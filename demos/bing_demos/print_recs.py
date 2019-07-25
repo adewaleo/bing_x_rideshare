@@ -77,6 +77,7 @@ def main():
             else:
                 new_recs.append(rec)
 
+        print("\n")
         for rec in new_recs:
             print_recommendation_item(rec)
 
