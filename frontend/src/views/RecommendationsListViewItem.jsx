@@ -48,17 +48,17 @@ class RecommendationsListViewItem extends React.Component {
                     <div className="icons-container blur-item on-screen">
                       <h4 className="heading-title text-warning mb-0">Option {this.props.route.id}</h4>
                       <section className="section-components">
-                        {this.props.route.quickest &&
-                          <span className="text-uppercase badge badge-primary badge-pill">Quickest</span>
-                        }
                         {this.props.route.cheapest &&
-                          <span className="text-uppercase badge badge-success badge-pill">Cheapest</span>
+                          <span className="text-uppercase badge badge-success badge-pill">Save 15 mins</span>
+                        }
+                        {this.props.route.quickest &&
+                          <span className="text-uppercase badge badge-primary badge-pill">Moderate cost</span>
                         }
                         {this.props.route.expensive &&
                           <span className="text-uppercase badge badge-danger badge-pill">Expensive</span>
                         }
                         {this.props.route.slowest &&
-                          <span className="text-uppercase badge badge-warning badge-pill">Slowest</span>
+                          <span className="text-uppercase badge badge-warning badge-pill">Cheapest</span>
                         }
                       </section>
                       <ul style={{margin: 0, padding: "1rem 0"}}>
@@ -74,8 +74,8 @@ class RecommendationsListViewItem extends React.Component {
                     </div>
                     <div>
                       <span className="lead" style={{marginRight: "2rem"}}>{this.props.route.startTime} - {this.props.route.endTime}</span>
-                      <span className="lead" style={{marginRight: "2rem"}}>{this.props.route.duration}</span>
                       <span className="lead" style={{marginRight: "2rem"}}>${this.props.route.cost}</span>
+                      <p className="" style={{marginRight: "2rem"}}>{this.props.route.duration}</p>
                     </div>
                   </Col>
                   <Col md="2">

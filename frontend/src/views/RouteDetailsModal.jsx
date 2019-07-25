@@ -53,15 +53,15 @@ class RouteDetailsModal extends React.Component {
           </div>
           <div className="modal-body">
             <section className="section-components">
-              <span className="text-uppercase badge badge-primary badge-pill">Quickest</span>
-              <span className="text-uppercase badge badge-success badge-pill">Cheapest</span>
+              <span className="text-uppercase badge badge-success badge-pill">Save 15 mins</span>
+              <span className="text-uppercase badge badge-primary badge-pill">Moderate cost</span>
               {/* <span className="text-uppercase badge badge-danger badge-pill">Expensive</span>
               <span className="text-uppercase badge badge-warning badge-pill">Slowest</span> */}
             </section>
             <div>
-              <span className="lead" style={{marginRight: "2rem"}}>17:03 - 18:27</span>
-              <span className="lead text-muted">1 hour, 25 minutes</span>
-              <p className="lead">$7.45</p>
+              <span className="lead" style={{marginRight: "2rem"}}>18:15 - 18:41</span>
+              <span className="text-muted">26 minutes</span>
+              <p className="lead">$8.25</p>
             </div>
             <hr />
             <h6>Trip details</h6>
@@ -72,12 +72,12 @@ class RouteDetailsModal extends React.Component {
                 <Card style={{minWidth: '100%'}}>
                   <CardBody>
                     <i className="fa fa-female" style={{fontSize: "2rem"}} />
-                    <span className="lead" style={{marginLeft: "1rem"}}>8 minutes</span>
+                    <span className="lead" style={{marginLeft: "1rem"}}>4 minutes</span>
                     <span className="lead"> | </span>
                     <span className="lead">Walk</span>
                     {/* <span className="lead"> | </span>
                     <span className="lead">$2.95</span> */}
-                    <p>Walk to the 106 Bothell bus stop</p>
+                    <p>Walk to Greenwood Ave N & N 92nd St</p>
                   </CardBody>
                 </Card>
               </Row>
@@ -87,12 +87,12 @@ class RouteDetailsModal extends React.Component {
                 <Card style={{minWidth: '100%'}}>
                   <CardBody>
                     <i className="fa fa-bus" style={{fontSize: "2rem"}} />
-                    <span className="lead" style={{marginLeft: "1rem"}}>34 minutes</span>
+                    <span className="lead" style={{marginLeft: "1rem"}}>15 minutes</span>
                     <span className="lead"> | </span>
                     <span className="lead">Transit</span>
                     <span className="lead"> | </span>
-                    <span className="lead">$6.00</span>
-                    <p>Take the 106 bus to Canyon Park & Ride</p>
+                    <span className="lead">$2.75</span>
+                    <p>Take the 5 bus - Downtown Seattle Greenwood and get off at Aurora Ave N & Denny Way</p>
                   </CardBody>
                 </Card>
               </Row>
@@ -101,28 +101,13 @@ class RouteDetailsModal extends React.Component {
               <Row>
                 <Card style={{minWidth: '100%'}}>
                   <CardBody>
-                    <i className="fa fa-bus" style={{fontSize: "2rem"}} />
-                    <span className="lead" style={{marginLeft: "1rem"}}>40 minutes</span>
+                    <i className="fa fa-car" style={{fontSize: "2rem"}} />
+                    <span className="lead" style={{marginLeft: "1rem"}}>7 minutes</span>
                     <span className="lead"> | </span>
-                    <span className="lead">Transit</span>
+                    <span className="lead">Rideshare</span>
                     <span className="lead"> | </span>
-                    <span className="lead">$1.45</span>
-                    <p>Take the 532 bus to Bellevue</p>
-                  </CardBody>
-                </Card>
-              </Row>
-            </Container>
-            <Container>
-              <Row>
-                <Card style={{minWidth: '100%'}}>
-                  <CardBody>
-                    <i className="fa fa-female" style={{fontSize: "2rem"}} />
-                    <span className="lead" style={{marginLeft: "1rem"}}>3 minutes</span>
-                    <span className="lead"> | </span>
-                    <span className="lead">Walk</span>
-                    {/* <span className="lead"> | </span>
-                    <span className="lead">$2.95</span> */}
-                    <p>Walk to Bellevue Square</p>
+                    <span className="lead">$5.50</span>
+                    <p>Walk to the Space Needle</p>
                   </CardBody>
                 </Card>
               </Row>
