@@ -33,9 +33,5 @@ class RouteOptimizer(object):
         self.basic_transit_routes = transit_routes
 
 
-
-
-
-
-    def print_route(self):
+    def get_simple_hybrid(self):
         pass
