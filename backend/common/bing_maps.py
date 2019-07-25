@@ -171,7 +171,7 @@ class BingWalkSegment(BingType):
 
 
 class BingTransportSegment(BingType):
-    def __init__(self, typeoftransport = None, depart_details = None, arrive_details = None, mantype= None, text= None, dist= None, duration=None, txt = None, cost = None):
+    def __init__(self, typeoftransport = None, depart_details = None, arrive_details = None, mantype= None, text= None, dist= None, duration=None, txt = None, cost=None, agency=None):
         self.typeofTransport = typeoftransport
         self.depart_details = depart_details
         self.arrive_details = arrive_details
@@ -180,6 +180,7 @@ class BingTransportSegment(BingType):
         self.manType = mantype
         self.text = txt
         self.cost = cost
+        self.agency = agency
 
 
 class BingDrivingRoute(BingType):
@@ -374,7 +375,7 @@ class BingMaps(object):
                     transport_segment = BingTransportSegment()
                     transport_segment.manType = segmentItem["details"][0]["maneuverType"]
                     transport_segment.dist = segmentItem["travelDistance"]
-                    transport_segment.duration = BingDuration.from_value_and_unit(segmentItem["travelDuration"], route["durationUnit"])
+                    transport_segment.duration = BingDuration.from_value_and_unit(route["travelDuration"], route["durationUnit"])
                     transport_segment.text = segmentItem["instruction"]["text"]
                     if transport_segment.dist > 10:
                         transport_segment.cost = 2.75

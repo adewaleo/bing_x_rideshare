@@ -143,7 +143,7 @@ class Recommendations(Resource):
         segment_dict["end_time"] = BingDateTime(end_time).date_time_str
 
         segment_dict["cost"] = bing_ride_share.fare
-        segment_dict["description"] = "Take an {} (please factor in pickup/drop time)".format(bing_ride_share.type)
+        segment_dict["description"] = "Use {} (factor in pickup/drop time).".format(bing_ride_share.type)
 
         result = {
             "segment": [segment_dict],
@@ -194,7 +194,7 @@ class Recommendations(Resource):
             "dest": segments[-1]["dest"],
             "start_time": segments[0]["start"],
             "end_time": segments[-1]["dest"],
-            "duration": bing_transit_route.fare
+            "duration": bing_transit_route.duration
         }
 
         return result
