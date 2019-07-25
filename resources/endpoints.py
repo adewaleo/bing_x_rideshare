@@ -95,14 +95,14 @@ class Recommendations(Resource):
 
         # largest cost should be the cheapest rideshare
         max_cost = min(uber_route_dict["cost"], lyft_route_dict["cost"])
-        max_duration = max(uber_route_dict["duration"], lyft_route_dict["duration"])
+        max_optimized_duration = None
 
         for t_route in transit_routes:
             transit_dict = self._process_transit_route(t_route)
             response_list.append(transit_dict)
 
-            # longest duration should be a regular transit route
-            max_duration = max(transit_dict["duration"], max_duration)
+            # longest duration should be that of a regular transit route
+            max_optimized_duration = transit_dict["duration"] if max_optimized_duration is None else min(transit_dict["duration"], max_optimized_duration)
 
             complex_routes = optimizer.get_simple_hybrid(t_route)
             for cmp_route in complex_routes:
@@ -111,9 +111,13 @@ class Recommendations(Resource):
         response_list.append(uber_route_dict)
         response_list.append(lyft_route_dict)
 
+        max_optimized_duration = max(uber_route_dict["duration"], lyft_route_dict["duration"], max_optimized_duration)
 
-        # filter suggested routes that are too slow or costly
-        optimized_list = list(filter(lambda route: route["cost"] < max_cost and route["duration"] < max_duration, optimized_list))
+
+        # filter suggested routes that are too slow or costly, sort by duration
+        optimized_list = list(filter(lambda route: route["cost"] < max_cost and route["duration"] < max_optimized_duration, optimized_list))
+        optimized_list = list(filter(_filter_routes_with_only_walk_rideshare, optimized_list))
+        optimized_list = sorted(optimized_list, key=lambda route: route["duration"])
         response_list.extend(optimized_list)
 
 
@@ -267,6 +271,18 @@ class Recommendations(Resource):
         }
 
         return result
+
+
+def _filter_routes_with_only_walk_rideshare(complex_route):
+    has_transit = False
+
+    for seg in complex_route["segments"]:
+        if seg["mode"].lower() == "transit":
+            has_transit = True
+            break
+
+    return has_transit
+
 
 
 
