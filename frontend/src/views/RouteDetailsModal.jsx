@@ -20,6 +20,10 @@ import React from "react";
 import {
   Button,
   Modal,
+  Row,
+  Card,
+  CardBody,
+  Container
 } from "reactstrap";
 
 import RouteDetailsSegment from "./RouteDetailsSegment.jsx";
@@ -51,18 +55,78 @@ class RouteDetailsModal extends React.Component {
             <section className="section-components">
               <span className="text-uppercase badge badge-primary badge-pill">Quickest</span>
               <span className="text-uppercase badge badge-success badge-pill">Cheapest</span>
-              <span className="text-uppercase badge badge-danger badge-pill">Expensive</span>
-              <span className="text-uppercase badge badge-warning badge-pill">Slowest</span>
+              {/* <span className="text-uppercase badge badge-danger badge-pill">Expensive</span>
+              <span className="text-uppercase badge badge-warning badge-pill">Slowest</span> */}
             </section>
             <div>
-              <span className="lead" style={{marginRight: "2rem"}}>13:45 - 13:55</span>
-              <span className="lead text-muted">10 minutes</span>
-              <p className="lead">$3.14</p>
+              <span className="lead" style={{marginRight: "2rem"}}>17:03 - 18:27</span>
+              <span className="lead text-muted">1 hour, 25 minutes</span>
+              <p className="lead">$7.45</p>
             </div>
             <hr />
             <h6>Trip details</h6>
-            <RouteDetailsSegment />
-            <RouteDetailsSegment />
+            {/* <RouteDetailsSegment />
+            <RouteDetailsSegment /> */}
+            <Container>
+              <Row>
+                <Card style={{minWidth: '100%'}}>
+                  <CardBody>
+                    <i className="fa fa-female" style={{fontSize: "2rem"}} />
+                    <span className="lead" style={{marginLeft: "1rem"}}>8 minutes</span>
+                    <span className="lead"> | </span>
+                    <span className="lead">Walk</span>
+                    {/* <span className="lead"> | </span>
+                    <span className="lead">$2.95</span> */}
+                    <p>Walk to the 106 Bothell bus stop</p>
+                  </CardBody>
+                </Card>
+              </Row>
+            </Container>
+            <Container>
+              <Row>
+                <Card style={{minWidth: '100%'}}>
+                  <CardBody>
+                    <i className="fa fa-bus" style={{fontSize: "2rem"}} />
+                    <span className="lead" style={{marginLeft: "1rem"}}>34 minutes</span>
+                    <span className="lead"> | </span>
+                    <span className="lead">Transit</span>
+                    <span className="lead"> | </span>
+                    <span className="lead">$6.00</span>
+                    <p>Take the 106 bus to Canyon Park & Ride</p>
+                  </CardBody>
+                </Card>
+              </Row>
+            </Container>
+            <Container>
+              <Row>
+                <Card style={{minWidth: '100%'}}>
+                  <CardBody>
+                    <i className="fa fa-bus" style={{fontSize: "2rem"}} />
+                    <span className="lead" style={{marginLeft: "1rem"}}>40 minutes</span>
+                    <span className="lead"> | </span>
+                    <span className="lead">Transit</span>
+                    <span className="lead"> | </span>
+                    <span className="lead">$1.45</span>
+                    <p>Take the 532 bus to Bellevue</p>
+                  </CardBody>
+                </Card>
+              </Row>
+            </Container>
+            <Container>
+              <Row>
+                <Card style={{minWidth: '100%'}}>
+                  <CardBody>
+                    <i className="fa fa-female" style={{fontSize: "2rem"}} />
+                    <span className="lead" style={{marginLeft: "1rem"}}>3 minutes</span>
+                    <span className="lead"> | </span>
+                    <span className="lead">Walk</span>
+                    {/* <span className="lead"> | </span>
+                    <span className="lead">$2.95</span> */}
+                    <p>Walk to Bellevue Square</p>
+                  </CardBody>
+                </Card>
+              </Row>
+            </Container>
           </div>
           <div className="modal-footer">
             <Button

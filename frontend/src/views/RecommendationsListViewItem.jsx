@@ -46,28 +46,36 @@ class RecommendationsListViewItem extends React.Component {
                 <Row className=" align-items-center justify-content-md-between">
                   <Col md="10">
                     <div className="icons-container blur-item on-screen">
-                      <h4 className="heading-title text-warning mb-0">Option 1</h4>
+                      <h4 className="heading-title text-warning mb-0">Option {this.props.route.id}</h4>
                       <section className="section-components">
-                        <span className="text-uppercase badge badge-primary badge-pill">Quickest</span>
-                        <span className="text-uppercase badge badge-success badge-pill">Cheapest</span>
-                        <span className="text-uppercase badge badge-danger badge-pill">Expensive</span>
-                        <span className="text-uppercase badge badge-warning badge-pill">Slowest</span>
+                        {this.props.route.quickest &&
+                          <span className="text-uppercase badge badge-primary badge-pill">Quickest</span>
+                        }
+                        {this.props.route.cheapest &&
+                          <span className="text-uppercase badge badge-success badge-pill">Cheapest</span>
+                        }
+                        {this.props.route.expensive &&
+                          <span className="text-uppercase badge badge-danger badge-pill">Expensive</span>
+                        }
+                        {this.props.route.slowest &&
+                          <span className="text-uppercase badge badge-warning badge-pill">Slowest</span>
+                        }
                       </section>
                       <ul style={{margin: 0, padding: "1rem 0"}}>
                         {this.props.route.segments.map((segment) =>
-                        <li key={segment.toString()} value={segment} style={{listStyleType: 'none'}}>
-                          <i className="fa fa-clock-o" style={{fontSize: "3rem", marginRight: "2rem"}} />
-                          <i className="fa fa-car" style={{fontSize: "3rem", marginRight: "2rem"}} />
-                          <i className="fa fa-female" style={{fontSize: "3rem", marginRight: "2rem"}} />
-                          <i className="fa fa-bus" style={{fontSize: "3rem", marginRight: "2rem"}} />
+                        <li key={segment.toString()} value={segment} style={{listStyleType: 'none', display: 'inline'}}>
+                          {segment.mode === 'wait' && <i className="fa fa-clock-o" style={{fontSize: "3rem", marginRight: "2rem"}} /> }
+                          {segment.mode === 'rideshare' && <i className="fa fa-car" style={{fontSize: "3rem", marginRight: "2rem"}} /> }
+                          {segment.mode === 'walk' && <i className="fa fa-female" style={{fontSize: "3rem", marginRight: "2rem"}} /> }
+                          {segment.mode === 'transit' && <i className="fa fa-bus" style={{fontSize: "3rem", marginRight: "2rem"}} /> }
                         </li>
                         )}
                       </ul>
                     </div>
                     <div>
-                      <span className="lead" style={{marginRight: "2rem"}}>13:45 - 13:55</span>
-                      <span className="lead" style={{marginRight: "2rem"}}>10 minutes</span>
-                      <span className="lead" style={{marginRight: "2rem"}}>$3.14</span>
+                      <span className="lead" style={{marginRight: "2rem"}}>{this.props.route.startTime} - {this.props.route.endTime}</span>
+                      <span className="lead" style={{marginRight: "2rem"}}>{this.props.route.duration}</span>
+                      <span className="lead" style={{marginRight: "2rem"}}>${this.props.route.cost}</span>
                     </div>
                   </Col>
                   <Col md="2">

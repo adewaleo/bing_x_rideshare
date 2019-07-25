@@ -23,8 +23,8 @@ import { Row, Col } from "reactstrap";
 class RecommendationsListView extends React.Component {
   constructor(props) {
     super(props);
-    this.route1 = {id: "1234", segments: [{mode: "transit"}]};
-    this.route2 = {id: "1234", segments: [{mode: "transit"}]};
+    this.route1 = {id: "1", segments: [{mode: "walk"}, {mode: "transit"}, {mode: "transit"}, {mode: "walk"}], quickest: true, cheapest: true, startTime: "17:03", endTime: "18:27", duration: "1 hour, 25 minutes", cost: "7.45"};
+    this.route2 = {id: "2", segments: [{mode: "transit"}, {mode: "rideshare"}], slowest: true, startTime: "17:03", endTime: "18:53", duration: "1 hour, 50 minutes", cost: "8.50"};
   }
 
   render() {
@@ -34,7 +34,6 @@ class RecommendationsListView extends React.Component {
         <Col lg="12">
           <RecommendationsListViewItem route={this.route1} />
           <RecommendationsListViewItem route={this.route2} />
-          {/* <RecommendationsListViewItem route={this.route} /> */}
         </Col>
       </Row>
       </>

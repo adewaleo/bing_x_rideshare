@@ -32,7 +32,7 @@ class RouteDetailsSegment extends React.Component {
           <Row>
             <Card style={{minWidth: '100%'}}>
               <CardBody>
-                <i className="fa fa-car" style={{fontSize: "2rem"}} />
+                <i className="fa fa-bus" style={{fontSize: "2rem"}} />
                 <span className="lead" style={{marginLeft: "1rem"}}>4 minutes</span>
                 <span className="lead"> | </span>
                 <span className="lead">Rideshare</span>

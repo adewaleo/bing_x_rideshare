@@ -90,22 +90,6 @@ class Landing extends React.Component {
                           src={require("assets/img/icons/common/microsoft.svg")}
                         />
                       </div>
-                      <div className="btn-wrapper mt-5">
-                        <Button
-                          className="btn-icon mb-3 mb-sm-0"
-                          color="github"
-                          href="https://aka.ms/bing-rideshare/home"
-                          target="_blank"
-                        >
-                          <span className="btn-inner--icon mr-1">
-                            <i className="fa fa-trophy" />
-                          </span>
-                          <span className="btn-inner--text">
-                            <span className="text-warning mr-1">Vote</span>
-                            for this project
-                          </span>
-                        </Button>
-                      </div>
                     </Col>
                   </Row>
                 </div>
@@ -129,7 +113,7 @@ class Landing extends React.Component {
             </section>
             {/* 1st Hero Variation */}
           </div>
-          <section className="section section-lg">
+          {/* <section className="section section-lg">
             <Container>
               <Row className="justify-content-center text-center mb-lg">
                 <Col lg="8">
@@ -264,8 +248,20 @@ class Landing extends React.Component {
                 </Col>
               </Row>
             </Container>
+          </section> */}
+          <section className="section section-lg bg-gradient-default">
+            <Container className="pt-lg pb-100">
+              <Row className="text-center justify-content-center">
+                <Col lg="10">
+                  <h2 className="display-3 text-white">Watch our video</h2>
+                  <p className="lead text-white">
+                    Coming soon...
+                  </p>
+                </Col>
+              </Row>
+            </Container>
           </section>
-          <section className="section section-lg pt-0">
+          <section className="section section-lg pt-0" style={{marginTop: "6rem"}}>
             <Container>
               <Card className="bg-gradient-info shadow-lg border-0">
                 <div className="p-5">
@@ -295,34 +291,7 @@ class Landing extends React.Component {
               </Card>
             </Container>
           </section>
-          <section className="section section-lg bg-gradient-default">
-            <Container className="pt-lg pb-100">
-              <Row className="text-center justify-content-center">
-                <Col lg="10">
-                  <h2 className="display-3 text-white">Watch our video</h2>
-                  <p className="lead text-white">
-                    Coming soon...
-                  </p>
-                </Col>
-              </Row>
-            </Container>
-            {/* SVG separator */}
-            <div className="separator separator-bottom separator-skew zindex-100">
-              {/* <svg
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="none"
-                version="1.1"
-                viewBox="0 0 2560 100"
-                x="0"
-                y="0"
-              >
-                <polygon
-                  className="fill-white"
-                  points="2560 0 2560 100 0 100"
-                />
-              </svg> */}
-            </div>
-          </section>
+          
         </main>
         <CardsFooter />
       </>
