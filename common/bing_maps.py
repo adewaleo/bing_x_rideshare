@@ -263,7 +263,7 @@ class BingDrivingRoute(BingType):
     @staticmethod
     def from_route_and_request_info(route_resource, source_location, dest_location, departure_date_time=None):
         distance = BingDistance(value=route_resource["travelDistance"], unit=route_resource["distanceUnit"])
-        duration = BingDuration.from_value_and_unit(value=route_resource["travelDurationTraffic"], unit=route_resource["durationUnit"])
+        duration = BingDuration.from_value_and_unit(value=route_resource["travelDuration"], unit=route_resource["durationUnit"])
 
         return BingDrivingRoute(source_location, dest_location, distance=distance, travel_duration=duration, departure_date_time=None)
 

@@ -22,7 +22,8 @@ def handle_error(ex=None, status_code=400, message=None):
     abort(status_code, **data)
 
 def assert_equals_or_warn(a, b):
-    try:
-        assert a == b
-    except AssertionError:
-        print("{} is not equal to {}".format(a, b), file=sys.stderr)
+    pass
+    # try:
+    #     assert a == b
+    # except AssertionError:
+    #     print("{} is not equal to {}".format(a, b), file=sys.stderr)
