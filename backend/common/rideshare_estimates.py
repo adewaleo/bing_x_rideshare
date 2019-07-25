@@ -17,9 +17,10 @@ class LyftEstimate(object):
     @classmethod
     def estimate_fare(cls, distance, duration):
          total_cost_per_mile = distance * cls.cost_per_mile
-         total_cost_per_minute = (duration/60) * cls.cost_per_minute
+         total_cost_per_minute = (duration/60.0) * cls.cost_per_minute
          fees = cls.base_fare + cls.service_fee + cls.seattle_city_fee
          fare = total_cost_per_mile + total_cost_per_minute + fees
+         fare = max(fare, cls.min_fare)
          return fare
 
 
@@ -37,9 +38,10 @@ class UberEstimate(object):
         # must calculate driver's distance from destination and include cost per minute/hour for pickup
         # must implement cancellations
         total_cost_per_mile = distance * cls.cost_per_mile
-        total_cost_per_minute = (duration / 60) * cls.cost_per_minute
+        total_cost_per_minute = (duration / 60.0) * cls.cost_per_minute
         fees = cls.base_fare + cls.booking_fee
         fare = total_cost_per_mile + total_cost_per_minute + fees
+        fare = max(fare, cls.min_fare)
         return fare
 
 
