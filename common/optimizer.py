@@ -35,6 +35,13 @@ class RouteOptimizer(object):
 
 
     def get_simple_hybrid(self, transit_route):
+        def _replace_simple_complex_route(last_segment, possible_complex_routes, transit_route):
+            rs_source = last_segment.depart_details.coords
+            rs_depart_time = last_segment.depart_details.time
+            ride_share_route = RideShareRoute.from_source_dest(rs_source, self.final_dest, rs_depart_time)
+            # possible_complex_routes.append(BingComplexRoute([transit_route, ride_share_route["lyft"]]))
+            possible_complex_routes.append(BingComplexRoute([transit_route, ride_share_route["uber"]]))
+
         if len(transit_route.segments) <= 1:
             return []
 
@@ -43,14 +50,25 @@ class RouteOptimizer(object):
             # get last segment, this is the start of the rideshare.
             last_segment = transit_route.segments[-1]
 
+            # update transit route by removing last segment
             transit_route = transit_route.get_route_without_last_segment()
 
             # if there is another transport segment beforehand
             if isinstance(last_segment, BingTransportSegment):
-                rs_source = last_segment.depart_details.coords
-                rs_depart_time = last_segment.depart_details.time
-                ride_share_route = RideShareRoute.from_source_dest(rs_source, self.final_dest, rs_depart_time)
+                _replace_simple_complex_route(last_segment, possible_complex_routes, transit_route)
+            else:
+                del last_segment
+                # in this case last segment is walk segment... so use previous transit segment to determine departure time.
+                try:
+                    second_to_last_segment = transit_route.segments[-1]
+                except IndexError:
+                    continue
+                if isinstance(second_to_last_segment, BingTransportSegment):
+                    rs_source = second_to_last_segment.arrive_details.coords
+                    rs_depart_time = second_to_last_segment.arrive_details.time
+                    ride_share_route = RideShareRoute.from_source_dest(rs_source, self.final_dest, rs_depart_time)
+                    # possible_complex_routes.append(BingComplexRoute([transit_route, ride_share_route["lyft"]]))
+                    possible_complex_routes.append(BingComplexRoute([transit_route, ride_share_route["uber"]]))
 
-                # possible_complex_routes.append(BingComplexRoute([transit_route, ride_share_route["lyft"]]))
-                possible_complex_routes.append(BingComplexRoute([transit_route, ride_share_route["uber"]]))
         return possible_complex_routes
+
