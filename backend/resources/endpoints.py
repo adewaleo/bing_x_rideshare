@@ -188,7 +188,7 @@ class Recommendations(Resource):
             segments.append(self._process_transit_segment(seg))
 
         result = {
-            "segment": [segments],
+            "segment": segments,
             "cost": bing_transit_route.fare,
             "start": segments[0]["start"],
             "dest": segments[-1]["dest"],
