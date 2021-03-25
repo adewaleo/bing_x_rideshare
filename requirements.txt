@@ -9,7 +9,7 @@ itsdangerous==1.1.0
 Jinja2==2.10.1
 MarkupSafe==1.1.1
 pytz==2019.1
-PyYAML==5.1.1
+PyYAML==5.4
 requests==2.22.0
 six==1.12.0
 uber-rides==0.6.0
