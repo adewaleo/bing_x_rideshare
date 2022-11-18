@@ -16,7 +16,7 @@
     "react-google-places-autocomplete": "^1.5.0",
     "react-headroom": "^2.2.8",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
+    "react-scripts": "5.0.1",
     "reactstrap": "^8.0.1"
   },
   "scripts": {
